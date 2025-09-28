@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { signIn, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+import Logo from '../components/Logo';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -56,79 +57,171 @@ export default function Login() {
   };
 
   return (
-    <div style={{ maxWidth: '400px', margin: '100px auto', padding: '20px', direction: 'rtl' }}>
-      <h1>{isLogin ? 'התחברות' : 'הרשמה'}</h1>
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="email" style={{ display: 'block', marginBottom: '5px' }}>
-            דוא"ל:
-          </label>
-          <input
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-            style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-          />
+    <div style={{
+      minHeight: '100vh',
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '20px',
+      direction: 'rtl'
+    }}>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '20px',
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+        padding: '40px',
+        width: '100%',
+        maxWidth: '450px',
+        textAlign: 'center'
+      }}>
+        {/* לוגו */}
+        <div style={{ marginBottom: '30px' }}>
+          <Logo width={220} height={90} />
         </div>
 
-        <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="password" style={{ display: 'block', marginBottom: '5px' }}>
-            סיסמה:
-          </label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            minLength={6}
-            style={{ width: '100%', padding: '8px', border: '1px solid #ccc', borderRadius: '4px' }}
-          />
-        </div>
+        {/* כותרת */}
+        <h1 style={{
+          color: '#333',
+          marginBottom: '30px',
+          fontSize: '28px',
+          fontWeight: '600'
+        }}>
+          {isLogin ? 'התחברות למערכת' : 'הרשמה למערכת'}
+        </h1>
 
+        {/* טופס */}
+        <form onSubmit={handleSubmit} style={{ textAlign: 'right' }}>
+          <div style={{ marginBottom: '20px' }}>
+            <label htmlFor="email" style={{
+              display: 'block',
+              marginBottom: '8px',
+              color: '#555',
+              fontWeight: '500'
+            }}>
+              דוא"ל:
+            </label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{
+                width: '100%',
+                padding: '15px',
+                border: '2px solid #e1e1e1',
+                borderRadius: '10px',
+                fontSize: '16px',
+                transition: 'border-color 0.3s ease',
+                outline: 'none'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+              onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
+            />
+          </div>
+
+          <div style={{ marginBottom: '25px' }}>
+            <label htmlFor="password" style={{
+              display: 'block',
+              marginBottom: '8px',
+              color: '#555',
+              fontWeight: '500'
+            }}>
+              סיסמה:
+            </label>
+            <input
+              type="password"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              minLength={6}
+              style={{
+                width: '100%',
+                padding: '15px',
+                border: '2px solid #e1e1e1',
+                borderRadius: '10px',
+                fontSize: '16px',
+                transition: 'border-color 0.3s ease',
+                outline: 'none'
+              }}
+              onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+              onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading}
+            style={{
+              backgroundColor: isLoading ? '#ccc' : 'linear-gradient(135deg, #0070f3, #0051cc)',
+              color: 'white',
+              padding: '15px 30px',
+              border: 'none',
+              borderRadius: '10px',
+              cursor: isLoading ? 'not-allowed' : 'pointer',
+              width: '100%',
+              fontSize: '16px',
+              fontWeight: '600',
+              transition: 'transform 0.2s ease',
+              outline: 'none'
+            }}
+            onMouseOver={(e) => !isLoading && (e.target.style.transform = 'translateY(-2px)')}
+            onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
+          >
+            {isLoading ? 'טוען...' : (isLogin ? 'התחבר למערכת' : 'צור חשבון חדש')}
+          </button>
+        </form>
+
+        {/* הודעות */}
+        {message && (
+          <div style={{
+            marginTop: '20px',
+            padding: '12px',
+            borderRadius: '8px',
+            backgroundColor: message.includes('success') ? '#d4edda' : '#f8d7da',
+            color: message.includes('success') ? '#155724' : '#721c24',
+            border: `1px solid ${message.includes('success') ? '#c3e6cb' : '#f5c6cb'}`
+          }}>
+            {message}
+          </div>
+        )}
+
+        {/* כפתור מעבר בין מצבים */}
         <button
-          type="submit"
-          disabled={isLoading}
+          onClick={() => setIsLogin(!isLogin)}
           style={{
-            backgroundColor: isLoading ? '#ccc' : '#0070f3',
-            color: 'white',
-            padding: '10px 15px',
+            background: 'none',
             border: 'none',
-            borderRadius: '4px',
-            cursor: isLoading ? 'not-allowed' : 'pointer',
-            width: '100%'
+            color: '#0070f3',
+            cursor: 'pointer',
+            marginTop: '20px',
+            fontSize: '14px',
+            textDecoration: 'underline'
           }}
         >
-          {isLoading ? 'טוען...' : (isLogin ? 'התחבר' : 'הירשם')}
+          {isLogin ? 'צריך ליצור חשבון? לחץ כאן' : 'כבר יש לך חשבון? לחץ כאן'}
         </button>
-      </form>
 
-      {message && (
-        <p style={{ marginTop: '15px', color: message.includes('success') ? 'green' : 'red' }}>
-          {message}
-        </p>
-      )}
-
-      <button
-        onClick={() => setIsLogin(!isLogin)}
-        style={{
-          background: 'none',
-          border: 'none',
-          color: '#0070f3',
-          cursor: 'pointer',
-          marginTop: '15px'
-        }}
-      >
-        {isLogin ? 'צריך ליצור חשבון?' : 'כבר יש לך חשבון?'}
-      </button>
-
-      <div style={{ marginTop: '30px', padding: '15px', backgroundColor: '#f0f0f0', borderRadius: '4px' }}>
-        <strong>מנהל ברירת מחדל:</strong><br />
-        דוא"ל: admin@test.com<br />
-        סיסמה: admin123
+        {/* מידע למנהל */}
+        <div style={{
+          marginTop: '30px',
+          padding: '20px',
+          backgroundColor: '#f8f9fa',
+          borderRadius: '10px',
+          border: '1px solid #e9ecef'
+        }}>
+          <h3 style={{ margin: '0 0 10px 0', color: '#495057', fontSize: '14px' }}>
+            מנהל ברירת מחדל:
+          </h3>
+          <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
+            דוא"ל: admin@test.com
+          </p>
+          <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
+            סיסמה: admin123
+          </p>
+        </div>
       </div>
     </div>
   );
