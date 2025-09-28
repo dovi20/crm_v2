@@ -1,6 +1,10 @@
 import Image from 'next/image';
 
-export default function Logo({ width = 200, height = 100, className = '' }) {
+export default function Logo({ width = 200, height, className = '' }) {
+  // Calculate height based on width to maintain aspect ratio
+  // Assuming original logo ratio is approximately 2:1 (width:height)
+  const calculatedHeight = height || Math.round(width * 0.4);
+
   return (
     <div className={`logo-container ${className}`} style={{
       display: 'inline-block',
@@ -14,7 +18,7 @@ export default function Logo({ width = 200, height = 100, className = '' }) {
         src="/logo.jpg"
         alt="Company Logo"
         width={width}
-        height={height}
+        height={calculatedHeight}
         priority
         style={{
           objectFit: 'contain',

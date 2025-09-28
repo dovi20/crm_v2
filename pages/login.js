@@ -77,7 +77,7 @@ export default function Login() {
       }}>
         {/* לוגו */}
         <div style={{ marginBottom: '30px' }}>
-          <Logo width={220} height={90} />
+          <Logo width={300} />
         </div>
 
         {/* כותרת */}

@@ -78,7 +78,7 @@ export default function Home() {
           textAlign: 'center',
           borderBottom: '1px solid #e9ecef'
         }}>
-          <Logo width={280} height={110} />
+          <Logo width={350} />
           <div style={{
             display: 'flex',
             justifyContent: 'space-between',
