@@ -8,15 +8,15 @@ export default NextAuth({
     CredentialsProvider({
       name: 'credentials',
       credentials: {
-        email: { label: 'Email', type: 'email' },
+        username: { label: 'Username or Email', type: 'text' },
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.username && !credentials?.email || !credentials?.password) {
+        if (!credentials?.username || !credentials?.password) {
           return null;
         }
 
-        const identifier = credentials.username || credentials.email;
+        const identifier = credentials.username; // This can be either username or email
         const user = await findUserByUsernameOrEmail(identifier);
 
         if (!user) {

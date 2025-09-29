@@ -42,7 +42,7 @@ docker-compose up --build
 - **דוא"ל:** admin@test.com
 - **סיסמה:** admin123
 
-**💡 הערה:** ניתן להתחבר גם עם שם המשתמש או עם הדוא"ל
+**💡 הערה:** ניתן להתחבר עם שם המשתמש או עם הדוא"ל
 
 ## 📁 מבנה הפרויקט
 

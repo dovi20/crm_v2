@@ -18,10 +18,9 @@ export default function Login() {
     setMessage('');
 
     if (isLogin) {
-      // Login - try username first, then email
+      // Login - use the identifier field (username or email)
       const result = await signIn('credentials', {
-        username,
-        email,
+        username: username, // This will be checked as both username and email
         password,
         redirect: false,
       });
@@ -97,52 +96,21 @@ export default function Login() {
 
         {/* טופס */}
         <form onSubmit={handleSubmit} style={{ textAlign: 'right' }}>
-          {!isLogin && (
-            <div style={{ marginBottom: '20px' }}>
-              <label htmlFor="username" style={{
-                display: 'block',
-                marginBottom: '8px',
-                color: '#555',
-                fontWeight: '500'
-              }}>
-                שם משתמש:
-              </label>
-              <input
-                type="text"
-                id="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required={!isLogin}
-                minLength={3}
-                style={{
-                  width: '100%',
-                  padding: '15px',
-                  border: '2px solid #e1e1e1',
-                  borderRadius: '10px',
-                  fontSize: '16px',
-                  transition: 'border-color 0.3s ease',
-                  outline: 'none'
-                }}
-                onFocus={(e) => e.target.style.borderColor = '#0070f3'}
-                onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
-              />
-            </div>
-          )}
-
           <div style={{ marginBottom: '20px' }}>
-            <label htmlFor="email" style={{
+            <label htmlFor="username" style={{
               display: 'block',
               marginBottom: '8px',
               color: '#555',
               fontWeight: '500'
             }}>
-              דוא"ל:
+              שם משתמש או דוא"ל:
             </label>
             <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              id="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              placeholder="הקלד שם משתמש או דוא״ל"
               required
               style={{
                 width: '100%',
@@ -157,6 +125,37 @@ export default function Login() {
               onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
             />
           </div>
+
+          {!isLogin && (
+            <div style={{ marginBottom: '20px' }}>
+              <label htmlFor="email" style={{
+                display: 'block',
+                marginBottom: '8px',
+                color: '#555',
+                fontWeight: '500'
+              }}>
+                דוא"ל (הרשמה בלבד):
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required={!isLogin}
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  border: '2px solid #e1e1e1',
+                  borderRadius: '10px',
+                  fontSize: '16px',
+                  transition: 'border-color 0.3s ease',
+                  outline: 'none'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
+              />
+            </div>
+          )}
 
           <div style={{ marginBottom: '25px' }}>
             <label htmlFor="password" style={{
@@ -253,13 +252,16 @@ export default function Login() {
             מנהל ברירת מחדל:
           </h3>
           <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
-            שם משתמש: admin
+            <strong>שם משתמש:</strong> admin
           </p>
           <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
-            דוא"ל: admin@test.com
+            <strong>דוא"ל:</strong> admin@test.com
           </p>
           <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
-            סיסמה: admin123
+            <strong>סיסמה:</strong> admin123
+          </p>
+          <p style={{ margin: '10px 0 0 0', fontSize: '12px', color: '#0070f3', fontStyle: 'italic' }}>
+            💡 ניתן להתחבר עם שם המשתמש או הדוא"ל
           </p>
         </div>
       </div>
