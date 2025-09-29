@@ -24,174 +24,116 @@ export default function Home() {
     }));
   };
 
-  // רשימת המשימות למערכת CRM מושלמת
+  // רשימת המשימות למערכת CRM מושלמת (מפושטת ל-15 שלבים עיקריים)
   const crmChecklist = [
     {
-      category: 'תשתית ואבטחה',
-      icon: '🔐',
+      category: 'שלב 1: תשתית בסיסית',
+      icon: '🏗️',
       color: '#667eea',
       items: [
-        { text: 'הקמת מסד נתונים (Prisma + SQLite)', done: true },
-        { text: 'מערכת אימות משתמשים (NextAuth)', done: true },
-        { text: 'עמוד התחברות והרשמה', done: true },
-        { text: 'הגנה על דפים פרטיים', done: true },
-        { text: 'Docker containerization', done: true },
-        { text: 'תמיכה ב-HTTPS וסיסמאות מוצפנות', done: false },
-        { text: 'גיבויים אוטומטיים של מסד הנתונים', done: false },
-        { text: 'לוגים ומעקב אחר פעילות משתמשים', done: false },
-        { text: 'הגבלת קצב בקשות (Rate Limiting)', done: false }
+        { text: 'הקמת מסד נתונים וטבלאות בסיסיות', done: true },
+        { text: 'מערכת אימות משתמשים מלאה', done: true },
+        { text: 'עמוד התחברות והרשמה מאובטחים', done: true },
+        { text: 'הגנה על דפים פרטיים ותמיכת Docker', done: true }
       ]
     },
     {
-      category: 'ניהול לקוחות (CRM Core)',
+      category: 'שלב 2: ניהול לקוחות',
       icon: '👥',
       color: '#28a745',
       items: [
-        { text: 'מודל Customers במסד הנתונים', done: false },
-        { text: 'עמוד רשימת לקוחות עם חיפוש וסינון', done: false },
-        { text: 'טופס הוספת לקוח חדש', done: false },
-        { text: 'עריכת פרטי לקוח קיים', done: false },
-        { text: 'מחיקת לקוח עם אישור', done: false },
-        { text: 'ייבוא לקוחות מקובץ Excel/CSV', done: false },
-        { text: 'ייצוא לקוחות לקובץ Excel/CSV', done: false },
-        { text: 'קטגוריות ותגיות ללקוחות', done: false },
-        { text: 'היסטוריית פעילות עם כל לקוח', done: false },
-        { text: 'תמונות פרופיל ללקוחות', done: false }
+        { text: 'מודל לקוחות במסד הנתונים', done: false },
+        { text: 'רשימת לקוחות עם חיפוש וסינון', done: false },
+        { text: 'טופס הוספת ועריכת לקוחות', done: false },
+        { text: 'ייבוא וייצוא לקוחות מקובץ', done: false }
       ]
     },
     {
-      category: 'ניהול עסקאות ומכירות',
+      category: 'שלב 3: ניהול עסקאות',
       icon: '💰',
       color: '#ffc107',
       items: [
-        { text: 'מודל Deals/Opportunities', done: false },
-        { text: 'תהליך מכירה (Sales Pipeline)', done: false },
-        { text: 'שלבי עסקה: ליד → הצעת מחיר → סגירה', done: false },
-        { text: 'חישוב הכנסות צפויות', done: false },
-        { text: 'דוחות מכירות חודשיים/שנתיים', done: false },
-        { text: 'גרפים ותרשימים של מכירות', done: false },
-        { text: 'תזכורות אוטומטיות למעקב עסקאות', done: false },
-        { text: 'ניהול הצעות מחיר', done: false },
-        { text: 'חישוב עמלות למוכרים', done: false }
+        { text: 'מודל עסקאות ותהליך מכירה', done: false },
+        { text: 'שלבי עסקה: ליד → הצעה → סגירה', done: false },
+        { text: 'חישוב הכנסות ותזכורות מעקב', done: false },
+        { text: 'דוחות מכירות בסיסיים', done: false }
       ]
     },
     {
-      category: 'משימות ולוח זמנים',
+      category: 'שלב 4: משימות ותזמון',
       icon: '📅',
       color: '#17a2b8',
       items: [
-        { text: 'מודל Tasks במסד הנתונים', done: false },
-        { text: 'יצירת משימות חדשות', done: false },
-        { text: 'הקצאת משימות לחברי צוות', done: false },
-        { text: 'תזמון משימות לתאריכים', done: false },
-        { text: 'סטטוסים: פתוח, בטיפול, הושלם', done: false },
-        { text: 'עדיפויות: נמוכה, בינונית, גבוהה, דחוף', done: false },
-        { text: 'תזכורות במייל ובמערכת', done: false },
-        { text: 'לוח שנה חזותי למשימות', done: false },
-        { text: 'שיוך משימות ללקוחות ועסקאות', done: false }
+        { text: 'מודל משימות במסד הנתונים', done: false },
+        { text: 'יצירה והקצאה של משימות', done: false },
+        { text: 'תזמון משימות ותזכורות', done: false },
+        { text: 'לוח שנה חזותי למשימות', done: false }
       ]
     },
     {
-      category: 'תקשורת ואינטראקציות',
+      category: 'שלב 5: תקשורת עם לקוחות',
       icon: '💬',
       color: '#6f42c1',
       items: [
-        { text: 'מודל Communications/Notes', done: false },
-        { text: 'רישום שיחות טלפון', done: false },
-        { text: 'שליחת אימיילים מהמערכת', done: false },
-        { text: 'תבניות אימיילים', done: false },
+        { text: 'רישום הערות ותקשורת עם לקוחות', done: false },
         { text: 'היסטוריית תקשורת מלאה', done: false },
-        { text: 'SMS notifications (אופציונלי)', done: false },
-        { text: 'אינטגרציה עם WhatsApp Business API', done: false },
-        { text: 'מעקב אחר אימיילים שנפתחו', done: false }
+        { text: 'תבניות אימיילים ושליחה מהמערכת', done: false },
+        { text: 'תזכורות אוטומטיות למעקב', done: false }
       ]
     },
     {
-      category: 'דוחות ואנליטיקה',
+      category: 'שלב 6: דוחות ואנליטיקה',
       icon: '📊',
       color: '#dc3545',
       items: [
-        { text: 'דוח מכירות לפי תקופה', done: false },
-        { text: 'דוח ביצועי מוכרים', done: false },
-        { text: 'אנליזת מקורות לידים', done: false },
-        { text: 'שיעור המרה (Conversion Rate)', done: false },
-        { text: 'דוח לקוחות פעילים vs מנותקים', done: false },
-        { text: 'גרפי מגמות לאורך זמן', done: false },
-        { text: 'דשבורד עם KPIs עיקריים', done: false },
-        { text: 'ייצוא דוחות ל-PDF/Excel', done: false }
+        { text: 'דוח מכירות מפורט לפי תקופות', done: false },
+        { text: 'דוח ביצועי צוות המכירות', done: false },
+        { text: 'גרפים ותרשימים חזותיים', done: false },
+        { text: 'ייצוא דוחות ל-Excel/PDF', done: false }
       ]
     },
     {
-      category: 'ניהול משתמשים והרשאות',
-      icon: '👤',
+      category: 'שלב 7: ניהול צוות',
+      icon: '👥',
       color: '#fd7e14',
       items: [
-        { text: 'מודל Users עם תפקידים', done: false },
-        { text: 'הרשאות: Admin, Manager, Sales, Viewer', done: false },
-        { text: 'ניהול צוות מכירות', done: false },
+        { text: 'מודל משתמשים עם תפקידים שונים', done: false },
+        { text: 'הרשאות: מנהל, מוכר, צופה', done: false },
         { text: 'הקצאת לקוחות למוכרים', done: false },
-        { text: 'מעקב פעילות משתמשים', done: false },
-        { text: 'התאמה אישית של ממשק למשתמש', done: false },
-        { text: 'הגדרות נוטיפיקציות אישיות', done: false }
+        { text: 'מעקב פעילות משתמשים', done: false }
       ]
     },
     {
-      category: 'אוטומציות',
+      category: 'שלב 8: אוטומציות',
       icon: '⚡',
       color: '#20c997',
       items: [
-        { text: 'תזכורות אוטומטיות למעקב', done: false },
+        { text: 'תזכורות אוטומטיות למעקב עסקאות', done: false },
         { text: 'אימיילים אוטומטיים ללקוחות חדשים', done: false },
-        { text: 'הקצאה אוטומטית של לידים', done: false },
-        { text: 'עדכון סטטוס עסקאות אוטומטי', done: false },
-        { text: 'דיוור שיווקי אוטומטי', done: false },
-        { text: 'תזכורות יום הולדת ללקוחות', done: false },
-        { text: 'Webhooks לאינטגרציות חיצוניות', done: false }
+        { text: 'הקצאה אוטומטית של לידים חדשים', done: false },
+        { text: 'עדכון סטטוס עסקאות אוטומטי', done: false }
       ]
     },
     {
-      category: 'אינטגרציות חיצוניות',
+      category: 'שלב 9: אינטגרציות',
       icon: '🔗',
       color: '#e83e8c',
       items: [
-        { text: 'אינטגרציה עם Gmail', done: false },
-        { text: 'אינטגרציה עם Google Calendar', done: false },
-        { text: 'אינטגרציה עם Slack', done: false },
-        { text: 'אינטגרציה עם Zoom', done: false },
-        { text: 'API פומבי למערכת', done: false },
-        { text: 'Zapier integration', done: false },
+        { text: 'אינטגרציה עם Gmail ו-Google Calendar', done: false },
+        { text: 'אינטגרציה עם Slack לנוטיפיקציות', done: false },
+        { text: 'API פומבי למערכת חיצונית', done: false },
         { text: 'אינטגרציה עם מערכות חשבוניות', done: false }
       ]
     },
     {
-      category: 'ממשק משתמש (UI/UX)',
+      category: 'שלב 10: ממשק משתמש',
       icon: '🎨',
       color: '#6610f2',
       items: [
-        { text: 'עיצוב רספונסיבי למובייל', done: false },
-        { text: 'תמיכה בעברית מלאה (RTL)', done: true },
+        { text: 'עיצוב רספונסיבי למובייל וטאבלט', done: false },
+        { text: 'תמיכה מלאה בעברית ו-RTL', done: true },
         { text: 'ערכת נושא בהירה וכהה', done: false },
-        { text: 'אייקונים ואנימציות', done: false },
-        { text: 'טפסים עם Validation מתקדם', done: false },
-        { text: 'Drag & Drop לארגון משימות', done: false },
-        { text: 'חיפוש גלובלי במערכת', done: false },
-        { text: 'קיצורי מקלדת', done: false },
-        { text: 'הנגשה (Accessibility)', done: false }
-      ]
-    },
-    {
-      category: 'תכונות מתקדמות',
-      icon: '🚀',
-      color: '#795548',
-      items: [
-        { text: 'AI לניתוח לידים והמלצות', done: false },
-        { text: 'Chatbot לשירות לקוחות', done: false },
-        { text: 'ניתוח סנטימנט בתקשורת', done: false },
-        { text: 'חיזוי מכירות (Forecasting)', done: false },
-        { text: 'מפות חום של פעילות', done: false },
-        { text: 'אפליקציה ניידת (PWA)', done: false },
-        { text: 'תמיכה מולטי-שפתית', done: false },
-        { text: 'מצב Offline', done: false }
+        { text: 'חיפוש גלובלי וקיצורי מקלדת', done: false }
       ]
     }
   ];
@@ -275,7 +217,7 @@ export default function Home() {
                 fontSize: '32px',
                 fontWeight: '700'
               }}>
-                מפת דרכים לבניית מערכת CRM מושלמת
+                מפת דרכים לבניית מערכת CRM מושלמת (10 שלבים)
               </h1>
               <p style={{
                 color: '#6c757d',
@@ -547,7 +489,7 @@ export default function Home() {
             margin: 0,
             fontSize: '16px'
           }}>
-            זוהי רשימה מקיפה של כל מה שנדרש לבניית מערכת CRM מתקדמת ומקצועית
+            מפת דרכים בת 10 שלבים לבניית מערכת CRM מתקדמת ומקצועית
           </p>
         </div>
       </div>
