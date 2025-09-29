@@ -24,122 +24,126 @@ export default function Home() {
     }));
   };
 
-  // רשימת המשימות למערכת CRM מושלמת (מפושטת ל-15 שלבים עיקריים)
-  const crmChecklist = [
+  // תוכנית עבודה - מערכת ניהול מלאי חצאיות
+  const projectChecklist = [
     {
-      category: 'שלב 1: תשתית בסיסית',
+      category: 'שלב 1: הכנת תשתית הפרויקט',
       icon: '🏗️',
       color: '#667eea',
+      progress: 20,
       items: [
-        { text: 'הקמת מסד נתונים וטבלאות בסיסיות', done: true },
-        { text: 'מערכת אימות משתמשים מלאה', done: true },
-        { text: 'עמוד התחברות והרשמה מאובטחים', done: true },
-        { text: 'הגנה על דפים פרטיים ותמיכת Docker', done: true }
+        { text: 'יצירת פרויקט Next.js חדש עם TypeScript', done: true },
+        { text: 'הגדרת מסד נתונים PostgreSQL עם Prisma ORM', done: true },
+        { text: 'הגדרת Vercel deployment ו-environment variables', done: false },
+        { text: 'ייבוא נתוני הקטלוג הראשוני ל-DB', done: true },
+        { text: 'הגדרת authentication בסיסי (אם נדרש)', done: false }
       ]
     },
     {
-      category: 'שלב 2: ניהול לקוחות',
-      icon: '👥',
+      category: 'שלב 2: עיצוב מסד הנתונים',
+      icon: '🗄️',
       color: '#28a745',
+      progress: 0,
       items: [
-        { text: 'מודל לקוחות במסד הנתונים', done: false },
-        { text: 'רשימת לקוחות עם חיפוש וסינון', done: false },
-        { text: 'טופס הוספת ועריכת לקוחות', done: false },
-        { text: 'ייבוא וייצוא לקוחות מקובץ', done: false }
+        { text: 'טבלת מוצרים (products) - ברקוד, מידה, אורך, צבע, דגם', done: false },
+        { text: 'טבלת מחסנים (warehouses) - שם, מיקום, קיבולת', done: false },
+        { text: 'טבלת מלאי במחסנים (warehouse_inventory)', done: false },
+        { text: 'טבלת אולם גדול (main_hall_inventory)', done: false },
+        { text: 'טבלת לקוחות (customers) - פרטים והיסטוריה', done: false },
+        { text: 'טבלת הזמנות (orders) - פריטים, סטטוס, מחירים', done: false },
+        { text: 'טבלת תנועות מלאי (inventory_movements)', done: false }
       ]
     },
     {
-      category: 'שלב 3: ניהול עסקאות',
-      icon: '💰',
+      category: 'שלב 3: פיתוח ממשק ניהול מלאי',
+      icon: '📦',
       color: '#ffc107',
+      progress: 25,
       items: [
-        { text: 'מודל עסקאות ותהליך מכירה', done: false },
-        { text: 'שלבי עסקה: ליד → הצעה → סגירה', done: false },
-        { text: 'חישוב הכנסות ותזכורות מעקב', done: false },
-        { text: 'דוחות מכירות בסיסיים', done: false }
+        { text: 'דף ראשי עם dashboard וסקירה כללית', done: true },
+        { text: 'דף חיפוש וסינון מוצרים עם ייצוא ל-Excel', done: true },
+        { text: 'ממשק הוספה/הסרה מלאי עם סריקת ברקוד', done: false },
+        { text: 'ממשק ניהול מחסנים והעברת מלאי', done: false }
       ]
     },
     {
-      category: 'שלב 4: משימות ותזמון',
-      icon: '📅',
+      category: 'שלב 4: פיתוח מערכת הזמנות',
+      icon: '📋',
       color: '#17a2b8',
+      progress: 0,
       items: [
-        { text: 'מודל משימות במסד הנתונים', done: false },
-        { text: 'יצירה והקצאה של משימות', done: false },
-        { text: 'תזמון משימות ותזכורות', done: false },
-        { text: 'לוח שנה חזותי למשימות', done: false }
+        { text: 'ניהול לקוחות - הוספה/עריכה/חיפוש', done: false },
+        { text: 'יצירת הזמנה חדשה עם בדיקת זמינות', done: false },
+        { text: 'ממשק עיבוד הזמנות ואישור/ביטול', done: false },
+        { text: 'דוחות הזמנות ומעקב סטטוס', done: false }
       ]
     },
     {
-      category: 'שלב 5: תקשורת עם לקוחות',
-      icon: '💬',
-      color: '#6f42c1',
-      items: [
-        { text: 'רישום הערות ותקשורת עם לקוחות', done: false },
-        { text: 'היסטוריית תקשורת מלאה', done: false },
-        { text: 'תבניות אימיילים ושליחה מהמערכת', done: false },
-        { text: 'תזכורות אוטומטיות למעקב', done: false }
-      ]
-    },
-    {
-      category: 'שלב 6: דוחות ואנליטיקה',
-      icon: '📊',
-      color: '#dc3545',
-      items: [
-        { text: 'דוח מכירות מפורט לפי תקופות', done: false },
-        { text: 'דוח ביצועי צוות המכירות', done: false },
-        { text: 'גרפים ותרשימים חזותיים', done: false },
-        { text: 'ייצוא דוחות ל-Excel/PDF', done: false }
-      ]
-    },
-    {
-      category: 'שלב 7: ניהול צוות',
-      icon: '👥',
-      color: '#fd7e14',
-      items: [
-        { text: 'מודל משתמשים עם תפקידים שונים', done: false },
-        { text: 'הרשאות: מנהל, מוכר, צופה', done: false },
-        { text: 'הקצאת לקוחות למוכרים', done: false },
-        { text: 'מעקב פעילות משתמשים', done: false }
-      ]
-    },
-    {
-      category: 'שלב 8: אוטומציות',
-      icon: '⚡',
-      color: '#20c997',
-      items: [
-        { text: 'תזכורות אוטומטיות למעקב עסקאות', done: false },
-        { text: 'אימיילים אוטומטיים ללקוחות חדשים', done: false },
-        { text: 'הקצאה אוטומטית של לידים חדשים', done: false },
-        { text: 'עדכון סטטוס עסקאות אוטומטי', done: false }
-      ]
-    },
-    {
-      category: 'שלב 9: אינטגרציות',
-      icon: '🔗',
-      color: '#e83e8c',
-      items: [
-        { text: 'אינטגרציה עם Gmail ו-Google Calendar', done: false },
-        { text: 'אינטגרציה עם Slack לנוטיפיקציות', done: false },
-        { text: 'API פומבי למערכת חיצונית', done: false },
-        { text: 'אינטגרציה עם מערכות חשבוניות', done: false }
-      ]
-    },
-    {
-      category: 'שלב 10: ממשק משתמש',
+      category: 'שלב 5: ממשק משתמש מתקדם',
       icon: '🎨',
-      color: '#6610f2',
+      color: '#6f42c1',
+      progress: 0,
       items: [
-        { text: 'עיצוב רספונסיבי למובייל וטאבלט', done: false },
-        { text: 'תמיכה מלאה בעברית ו-RTL', done: true },
-        { text: 'ערכת נושא בהירה וכהה', done: false },
-        { text: 'חיפוש גלובלי וקיצורי מקלדת', done: false }
+        { text: 'עיצוב רספונסיבי למובייל ודסקטופ', done: false },
+        { text: 'תכונות מתקדמות - התראות, קיצורים', done: false },
+        { text: 'תמיכה בסריקת ברקודים וניווט נוח', done: false },
+        { text: 'אבטחה וביצועים - הגנות ו-caching', done: false }
+      ]
+    },
+    {
+      category: 'שלב 6: פיתוח API ושרת',
+      icon: '🔗',
+      color: '#dc3545',
+      progress: 0,
+      items: [
+        { text: 'API endpoints מלאים לכל הפעולות', done: false },
+        { text: 'אימות והרשאות עם JWT ותפקידים', done: false },
+        { text: 'דוחות וסטטיסטיקות מתקדמות', done: false },
+        { text: 'תיעוד API עם Swagger', done: false }
+      ]
+    },
+    {
+      category: 'שלב 7: בדיקות ואופטימיזציה',
+      icon: '🧪',
+      color: '#fd7e14',
+      progress: 0,
+      items: [
+        { text: 'בדיקות יחידה (Unit Tests) לפונקציות', done: false },
+        { text: 'בדיקות אינטגרציה וזרימה מלאה', done: false },
+        { text: 'בדיקות UX/UI וביצועים', done: false },
+        { text: 'אופטימיזציה של זמני טעינה ו-DB', done: false }
+      ]
+    },
+    {
+      category: 'שלב 8: השקה ותחזוקה',
+      icon: '🚀',
+      color: '#20c997',
+      progress: 0,
+      items: [
+        { text: 'הגדרת סביבת ייצור ב-Vercel', done: false },
+        { text: 'העלאת מסד נתונים וגיבויים', done: false },
+        { text: 'בדיקות סופיות ותאימות ייצור', done: false },
+        { text: 'הכשרת משתמשים ומדריך שימוש', done: false }
+      ]
+    },
+    {
+      category: 'שלב 9: אינטגרציה ריווחית',
+      icon: '🔄',
+      color: '#e83e8c',
+      progress: 0,
+      items: [
+        { text: 'הגדרת חיבור API לריווחית', done: false },
+        { text: 'מודול סנכרון לקוחות ומוצרים', done: false },
+        { text: 'מודול הפקת מסמכים וחשבוניות', done: false },
+        { text: 'מודול דוחות וסטטיסטיקות', done: false },
+        { text: 'טיפול בשגיאות ומנגנון retry', done: false },
+        { text: 'אופטימיזציה וביצועי סנכרון', done: false }
       ]
     }
   ];
 
-  const totalTasks = crmChecklist.reduce((acc, cat) => acc + cat.items.length, 0);
-  const completedTasks = crmChecklist.reduce((acc, cat) => 
+  const totalTasks = projectChecklist.reduce((acc, cat) => acc + cat.items.length, 0);
+  const completedTasks = projectChecklist.reduce((acc, cat) =>
     acc + cat.items.filter(item => item.done).length, 0
   );
   const progressPercentage = Math.round((completedTasks / totalTasks) * 100);
@@ -217,7 +221,7 @@ export default function Home() {
                 fontSize: '32px',
                 fontWeight: '700'
               }}>
-                מפת דרכים לבניית מערכת CRM מושלמת (10 שלבים)
+                מערכת ניהול מלאי חצאיות - מפת דרכים
               </h1>
               <p style={{
                 color: '#6c757d',
@@ -325,7 +329,7 @@ export default function Home() {
           gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))',
           gap: '20px'
         }}>
-          {crmChecklist.map((category, idx) => {
+          {projectChecklist.map((category, idx) => {
             const categoryCompleted = category.items.filter(i => i.done).length;
             const categoryTotal = category.items.length;
             const categoryProgress = Math.round((categoryCompleted / categoryTotal) * 100);
@@ -489,7 +493,7 @@ export default function Home() {
             margin: 0,
             fontSize: '16px'
           }}>
-            מפת דרכים בת 10 שלבים לבניית מערכת CRM מתקדמת ומקצועית
+            מפת דרכים בת 9 שלבים לבניית מערכת ניהול מלאי חצאיות מתקדמת עם אינטגרציה לריווחית
           </p>
         </div>
       </div>
