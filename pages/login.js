@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Logo from '../components/Logo';
 
 export default function Login() {
+  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLogin, setIsLogin] = useState(true);
@@ -17,8 +18,9 @@ export default function Login() {
     setMessage('');
 
     if (isLogin) {
-      // Login
+      // Login - try username first, then email
       const result = await signIn('credentials', {
+        username,
         email,
         password,
         redirect: false,
@@ -37,7 +39,7 @@ export default function Login() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ email, password }),
+          body: JSON.stringify({ username, email, password }),
         });
 
         const data = await response.json();
@@ -45,6 +47,9 @@ export default function Login() {
         if (response.ok) {
           setMessage('משתמש נוצר בהצלחה! אנא התחבר.');
           setIsLogin(true);
+          setUsername('');
+          setEmail('');
+          setPassword('');
         } else {
           setMessage(data.message || 'אירעה שגיאה');
         }
@@ -92,6 +97,38 @@ export default function Login() {
 
         {/* טופס */}
         <form onSubmit={handleSubmit} style={{ textAlign: 'right' }}>
+          {!isLogin && (
+            <div style={{ marginBottom: '20px' }}>
+              <label htmlFor="username" style={{
+                display: 'block',
+                marginBottom: '8px',
+                color: '#555',
+                fontWeight: '500'
+              }}>
+                שם משתמש:
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required={!isLogin}
+                minLength={3}
+                style={{
+                  width: '100%',
+                  padding: '15px',
+                  border: '2px solid #e1e1e1',
+                  borderRadius: '10px',
+                  fontSize: '16px',
+                  transition: 'border-color 0.3s ease',
+                  outline: 'none'
+                }}
+                onFocus={(e) => e.target.style.borderColor = '#0070f3'}
+                onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
+              />
+            </div>
+          )}
+
           <div style={{ marginBottom: '20px' }}>
             <label htmlFor="email" style={{
               display: 'block',
@@ -215,6 +252,9 @@ export default function Login() {
           <h3 style={{ margin: '0 0 10px 0', color: '#495057', fontSize: '14px' }}>
             מנהל ברירת מחדל:
           </h3>
+          <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
+            שם משתמש: admin
+          </p>
           <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
             דוא"ל: admin@test.com
           </p>

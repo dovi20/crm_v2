@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { verifyPassword } from '../../../lib/auth';
-import { findUserByEmail } from '../../../lib/auth';
+import { findUserByUsernameOrEmail } from '../../../lib/auth';
 
 export default NextAuth({
   providers: [
@@ -12,11 +12,12 @@ export default NextAuth({
         password: { label: 'Password', type: 'password' }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.username && !credentials?.email || !credentials?.password) {
           return null;
         }
 
-        const user = await findUserByEmail(credentials.email);
+        const identifier = credentials.username || credentials.email;
+        const user = await findUserByUsernameOrEmail(identifier);
 
         if (!user) {
           return null;
@@ -34,6 +35,7 @@ export default NextAuth({
         return {
           id: user.id,
           email: user.email,
+          username: user.username,
         };
       }
     })
@@ -45,12 +47,14 @@ export default NextAuth({
     async jwt({ token, user }) {
       if (user) {
         token.id = user.id;
+        token.username = user.username;
       }
       return token;
     },
     async session({ session, token }) {
       if (token) {
         session.user.id = token.id;
+        session.user.username = token.username;
       }
       return session;
     },

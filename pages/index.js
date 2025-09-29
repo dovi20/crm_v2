@@ -145,6 +145,9 @@ export default function Home() {
               </h2>
               <div style={{ fontSize: '18px', lineHeight: '1.6' }}>
                 <p style={{ margin: '10px 0' }}>
+                  <strong>שם משתמש:</strong> {session.user?.username || 'לא זמין'}
+                </p>
+                <p style={{ margin: '10px 0' }}>
                   <strong>דוא"ל:</strong> {session.user?.email}
                 </p>
                 <p style={{ margin: '10px 0' }}>
