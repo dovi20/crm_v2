@@ -102,33 +102,33 @@ export default function Login() {
         backgroundColor: theme.innerBackground,
         borderRadius: '20px',
         boxShadow: theme.innerShadow,
-        padding: '40px',
+        padding: '25px',
         width: '100%',
-        maxWidth: '450px',
+        maxWidth: '400px',
         textAlign: 'center',
         position: 'relative'
       }}>
         {/* Dark Mode Toggle */}
         <button onClick={() => setDarkMode(!darkMode)} style={{
           position: 'absolute',
-          top: '20px',
-          right: '20px',
+          top: '15px',
+          right: '15px',
           background: 'none',
           border: 'none',
           color: theme.h1Color,
-          fontSize: '24px',
+          fontSize: '20px',
           cursor: 'pointer'
         }}>{darkMode ? '☀️' : '🌙'}</button>
         {/* לוגו */}
-        <div style={{ marginBottom: '30px' }}>
-          <Logo width={300} darkMode={darkMode} />
+        <div style={{ marginBottom: '10px' }}>
+          <Logo width={180} darkMode={darkMode} />
         </div>
 
         {/* כותרת */}
         <h1 style={{
           color: theme.h1Color,
-          marginBottom: '30px',
-          fontSize: '28px',
+          marginBottom: '20px',
+          fontSize: '24px',
           fontWeight: '600'
         }}>
           {isLogin ? 'התחברות למערכת' : 'הרשמה למערכת'}
@@ -286,30 +286,7 @@ export default function Login() {
           {isLogin ? 'צריך ליצור חשבון? לחץ כאן' : 'כבר יש לך חשבון? לחץ כאן'}
         </button>
 
-        {/* מידע למנהל */}
-        <div style={{
-          marginTop: '30px',
-          padding: '20px',
-          backgroundColor: theme.adminBg,
-          borderRadius: '10px',
-          border: `1px solid ${theme.adminBorder}`
-        }}>
-          <h3 style={{ margin: '0 0 10px 0', color: theme.adminH3Color, fontSize: '14px' }}>
-            מנהל ברירת מחדל:
-          </h3>
-          <p style={{ margin: '5px 0', fontSize: '13px', color: theme.adminTextColor }}>
-            <strong>שם משתמש:</strong> admin
-          </p>
-          <p style={{ margin: '5px 0', fontSize: '13px', color: theme.adminTextColor }}>
-            <strong>דוא"ל:</strong> admin@test.com
-          </p>
-          <p style={{ margin: '5px 0', fontSize: '13px', color: theme.adminTextColor }}>
-            <strong>סיסמה:</strong> admin123
-          </p>
-          <p style={{ margin: '10px 0 0 0', fontSize: '12px', color: '#0070f3', fontStyle: 'italic' }}>
-            💡 ניתן להתחבר עם שם המשתמש או הדוא"ל
-          </p>
-        </div>
+
       </div>
     </div>
   );
