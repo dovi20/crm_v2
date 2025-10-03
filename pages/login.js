@@ -10,8 +10,19 @@ export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('darkMode') === 'true';
+    }
+    return false;
+  });
   const router = useRouter();
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('darkMode', darkMode.toString());
+    }
+  }, [darkMode]);
 
   useEffect(() => {
     if (message) {
@@ -286,6 +297,18 @@ export default function Login() {
           {isLogin ? 'צריך ליצור חשבון? לחץ כאן' : 'כבר יש לך חשבון? לחץ כאן'}
         </button>
 
+        {/* Footer */}
+        <div style={{
+          marginTop: '30px',
+          padding: '15px',
+          backgroundColor: theme.innerBackground,
+          borderTop: `1px solid ${theme.adminBorder}`,
+          textAlign: 'center',
+          fontSize: '12px',
+          color: theme.labelColor
+        }}>
+          גרסה 1.0.0 - נבנה באהבה על ידי Dovi - <a href="https://github.com/dovi20" target="_blank" rel="noopener noreferrer" style={{ color: '#0070f3', textDecoration: 'none' }}>GitHub</a>
+        </div>
 
       </div>
     </div>
