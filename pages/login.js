@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn, getSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import Logo from '../components/Logo';
@@ -10,7 +10,35 @@ export default function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [darkMode, setDarkMode] = useState(false);
   const router = useRouter();
+
+  useEffect(() => {
+    if (message) {
+      setMessage('');
+    }
+  }, [username, password]);
+
+  const theme = {
+    outerBackground: darkMode ? '#1a1a1a' : 'white',
+    innerBackground: darkMode ? '#2a2a2a' : 'white',
+    innerShadow: darkMode ? '0 20px 40px rgba(0, 0, 0, 0.5)' : '0 20px 40px rgba(0, 0, 0, 0.1)',
+    h1Color: darkMode ? 'white' : '#333',
+    labelColor: darkMode ? '#ccc' : '#555',
+    inputBorderColor: darkMode ? '#666' : '#e1e1e1',
+    inputBackground: darkMode ? '#444' : 'white',
+    inputColor: darkMode ? 'white' : 'black',
+    messageSuccessBg: darkMode ? '#3a5e3a' : '#d4edda',
+    messageSuccessColor: darkMode ? '#c3e6c3' : '#155724',
+    messageSuccessBorder: darkMode ? '#5a8c5a' : '#c3e6cb',
+    messageErrorBg: darkMode ? '#6c3c3c' : '#f8d7da',
+    messageErrorColor: darkMode ? '#f2c3c3' : '#721c24',
+    messageErrorBorder: darkMode ? '#a37272' : '#f5c6cb',
+    adminBg: darkMode ? '#4a4a4a' : '#f8f9fa',
+    adminBorder: darkMode ? '#666' : '#e9ecef',
+    adminTextColor: darkMode ? '#ccc' : '#6c757d',
+    adminH3Color: darkMode ? '#ccc' : '#495057'
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -63,7 +91,7 @@ export default function Login() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+      background: theme.outerBackground,
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
@@ -71,22 +99,34 @@ export default function Login() {
       direction: 'rtl'
     }}>
       <div style={{
-        backgroundColor: 'white',
+        backgroundColor: theme.innerBackground,
         borderRadius: '20px',
-        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.1)',
+        boxShadow: theme.innerShadow,
         padding: '40px',
         width: '100%',
         maxWidth: '450px',
-        textAlign: 'center'
+        textAlign: 'center',
+        position: 'relative'
       }}>
+        {/* Dark Mode Toggle */}
+        <button onClick={() => setDarkMode(!darkMode)} style={{
+          position: 'absolute',
+          top: '20px',
+          right: '20px',
+          background: 'none',
+          border: 'none',
+          color: theme.h1Color,
+          fontSize: '24px',
+          cursor: 'pointer'
+        }}>{darkMode ? '☀️' : '🌙'}</button>
         {/* לוגו */}
         <div style={{ marginBottom: '30px' }}>
-          <Logo width={300} />
+          <Logo width={300} darkMode={darkMode} />
         </div>
 
         {/* כותרת */}
         <h1 style={{
-          color: '#333',
+          color: theme.h1Color,
           marginBottom: '30px',
           fontSize: '28px',
           fontWeight: '600'
@@ -100,7 +140,7 @@ export default function Login() {
             <label htmlFor="username" style={{
               display: 'block',
               marginBottom: '8px',
-              color: '#555',
+              color: theme.labelColor,
               fontWeight: '500'
             }}>
               שם משתמש או דוא"ל:
@@ -115,14 +155,16 @@ export default function Login() {
               style={{
                 width: '100%',
                 padding: '15px',
-                border: '2px solid #e1e1e1',
+                border: `2px solid ${theme.inputBorderColor}`,
                 borderRadius: '10px',
                 fontSize: '16px',
+                backgroundColor: theme.inputBackground,
+                color: theme.inputColor,
                 transition: 'border-color 0.3s ease',
                 outline: 'none'
               }}
               onFocus={(e) => e.target.style.borderColor = '#0070f3'}
-              onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
+              onBlur={(e) => e.target.style.borderColor = theme.inputBorderColor}
             />
           </div>
 
@@ -131,7 +173,7 @@ export default function Login() {
               <label htmlFor="email" style={{
                 display: 'block',
                 marginBottom: '8px',
-                color: '#555',
+                color: theme.labelColor,
                 fontWeight: '500'
               }}>
                 דוא"ל (הרשמה בלבד):
@@ -145,14 +187,16 @@ export default function Login() {
                 style={{
                   width: '100%',
                   padding: '15px',
-                  border: '2px solid #e1e1e1',
+                  border: `2px solid ${theme.inputBorderColor}`,
                   borderRadius: '10px',
                   fontSize: '16px',
+                  backgroundColor: theme.inputBackground,
+                  color: theme.inputColor,
                   transition: 'border-color 0.3s ease',
                   outline: 'none'
                 }}
                 onFocus={(e) => e.target.style.borderColor = '#0070f3'}
-                onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
+                onBlur={(e) => e.target.style.borderColor = theme.inputBorderColor}
               />
             </div>
           )}
@@ -161,7 +205,7 @@ export default function Login() {
             <label htmlFor="password" style={{
               display: 'block',
               marginBottom: '8px',
-              color: '#555',
+              color: theme.labelColor,
               fontWeight: '500'
             }}>
               סיסמה:
@@ -176,34 +220,36 @@ export default function Login() {
               style={{
                 width: '100%',
                 padding: '15px',
-                border: '2px solid #e1e1e1',
+                border: `2px solid ${theme.inputBorderColor}`,
                 borderRadius: '10px',
                 fontSize: '16px',
+                backgroundColor: theme.inputBackground,
+                color: theme.inputColor,
                 transition: 'border-color 0.3s ease',
                 outline: 'none'
               }}
               onFocus={(e) => e.target.style.borderColor = '#0070f3'}
-              onBlur={(e) => e.target.style.borderColor = '#e1e1e1'}
+              onBlur={(e) => e.target.style.borderColor = theme.inputBorderColor}
             />
           </div>
 
           <button
             type="submit"
-            disabled={isLoading}
+            disabled={isLoading || !username || !password}
             style={{
-              backgroundColor: isLoading ? '#ccc' : 'linear-gradient(135deg, #0070f3, #0051cc)',
+              backgroundColor: (isLoading || !username || !password) ? (darkMode ? '#555' : '#ccc') : 'linear-gradient(135deg, #0070f3, #0051cc)',
               color: 'white',
               padding: '15px 30px',
               border: 'none',
               borderRadius: '10px',
-              cursor: isLoading ? 'not-allowed' : 'pointer',
+              cursor: (isLoading || !username || !password) ? 'not-allowed' : 'pointer',
               width: '100%',
               fontSize: '16px',
               fontWeight: '600',
               transition: 'transform 0.2s ease',
               outline: 'none'
             }}
-            onMouseOver={(e) => !isLoading && (e.target.style.transform = 'translateY(-2px)')}
+            onMouseOver={(e) => !(isLoading || !username || !password) && (e.target.style.transform = 'translateY(-2px)')}
             onMouseOut={(e) => e.target.style.transform = 'translateY(0)'}
           >
             {isLoading ? 'טוען...' : (isLogin ? 'התחבר למערכת' : 'צור חשבון חדש')}
@@ -216,9 +262,9 @@ export default function Login() {
             marginTop: '20px',
             padding: '12px',
             borderRadius: '8px',
-            backgroundColor: message.includes('success') ? '#d4edda' : '#f8d7da',
-            color: message.includes('success') ? '#155724' : '#721c24',
-            border: `1px solid ${message.includes('success') ? '#c3e6cb' : '#f5c6cb'}`
+            backgroundColor: message.includes('success') ? theme.messageSuccessBg : theme.messageErrorBg,
+            color: message.includes('success') ? theme.messageSuccessColor : theme.messageErrorColor,
+            border: `1px solid ${message.includes('success') ? theme.messageSuccessBorder : theme.messageErrorBorder}`
           }}>
             {message}
           </div>
@@ -244,20 +290,20 @@ export default function Login() {
         <div style={{
           marginTop: '30px',
           padding: '20px',
-          backgroundColor: '#f8f9fa',
+          backgroundColor: theme.adminBg,
           borderRadius: '10px',
-          border: '1px solid #e9ecef'
+          border: `1px solid ${theme.adminBorder}`
         }}>
-          <h3 style={{ margin: '0 0 10px 0', color: '#495057', fontSize: '14px' }}>
+          <h3 style={{ margin: '0 0 10px 0', color: theme.adminH3Color, fontSize: '14px' }}>
             מנהל ברירת מחדל:
           </h3>
-          <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
+          <p style={{ margin: '5px 0', fontSize: '13px', color: theme.adminTextColor }}>
             <strong>שם משתמש:</strong> admin
           </p>
-          <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
+          <p style={{ margin: '5px 0', fontSize: '13px', color: theme.adminTextColor }}>
             <strong>דוא"ל:</strong> admin@test.com
           </p>
-          <p style={{ margin: '5px 0', fontSize: '13px', color: '#6c757d' }}>
+          <p style={{ margin: '5px 0', fontSize: '13px', color: theme.adminTextColor }}>
             <strong>סיסמה:</strong> admin123
           </p>
           <p style={{ margin: '10px 0 0 0', fontSize: '12px', color: '#0070f3', fontStyle: 'italic' }}>
