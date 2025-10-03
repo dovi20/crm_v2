@@ -15,11 +15,26 @@ export default function DashboardLayout({ children, currentTab }) {
     return false;
   });
 
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('darkMode', darkMode.toString());
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      if (window.innerWidth > 768) {
+        setIsSidebarOpen(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -85,12 +100,35 @@ export default function DashboardLayout({ children, currentTab }) {
       minHeight: '100vh',
       backgroundColor: theme.outerBackground,
       fontFamily: 'Arial, sans-serif',
-      direction: 'rtl'
+      direction: 'rtl',
+      padding: '10px'
     }}>
+      {isMobile && (
+        <button
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          style={{
+            position: 'absolute',
+            top: '20px',
+            left: '20px',
+            backgroundColor: theme.sidebarBackground,
+            color: theme.sidebarText,
+            border: 'none',
+            padding: '10px',
+            borderRadius: '5px',
+            cursor: 'pointer',
+            zIndex: 1001
+          }}
+        >
+          ☰
+        </button>
+      )}
       <div style={{
-        display: 'flex',
-        minHeight: '100vh'
-      }}>
+        display: 'grid',
+        gridTemplateColumns: '280px 1fr',
+        gap: '20px',
+        minHeight: 'calc(100vh - 20px)'
+      }}
+      className="dashboard-wrapper">
         {/* Sidebar */}
         <div style={{
           width: '280px',
@@ -98,8 +136,14 @@ export default function DashboardLayout({ children, currentTab }) {
           color: theme.sidebarText,
           padding: '20px',
           boxShadow: theme.shadow,
-          display: 'flex',
-          flexDirection: 'column'
+          display: isMobile ? (isSidebarOpen ? 'flex' : 'none') : 'flex',
+          flexDirection: 'column',
+          position: isMobile ? 'fixed' : 'static',
+          top: isMobile ? '0' : 'auto',
+          left: isMobile ? '0' : 'auto',
+          height: isMobile ? '100vh' : 'auto',
+          zIndex: isMobile ? '1000' : 'auto',
+          direction: 'ltr'
         }}>
           <div style={{
             textAlign: 'center',
@@ -211,6 +255,14 @@ export default function DashboardLayout({ children, currentTab }) {
         @keyframes fadeIn {
           0% { opacity: 0; transform: translateY(10px); }
           100% { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+      <style jsx global>{`
+        @media (max-width: 768px) {
+          .dashboard-wrapper {
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+          }
         }
       `}</style>
     </div>
