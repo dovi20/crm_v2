@@ -11,20 +11,21 @@ function CustomerCard({ customer, theme, onClick }) {
         backgroundColor: theme.cardBackground,
         border: `1px solid ${theme.border}`,
         borderRadius: '8px',
-        padding: '20px',
+        padding: '16px',
         cursor: 'pointer',
         transition: 'all 0.2s ease',
-        ':hover': { boxShadow: `0 4px 12px ${theme.shadow}` }
+        textAlign: 'center',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
       }}
       onClick={onClick}
-      onMouseEnter={(e) => {
+      onMouseEnter={!window.matchMedia('(max-width: 768px)').matches ? (e) => {
         e.target.style.transform = 'translateY(-2px)';
-        e.target.style.boxShadow = `0 4px 12px ${theme.shadow}`;
-      }}
-      onMouseLeave={(e) => {
+        e.target.style.boxShadow = `0 4px 12px ${theme.shadow || 'rgba(0,0,0,0.15)'}`;
+      } : undefined}
+      onMouseLeave={!window.matchMedia('(max-width: 768px)').matches ? (e) => {
         e.target.style.transform = 'translateY(0)';
-        e.target.style.boxShadow = 'none';
-      }}
+        e.target.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
+      } : undefined}
     >
       <div style={{ marginBottom: '12px' }}>
         <h4 style={{
@@ -37,31 +38,22 @@ function CustomerCard({ customer, theme, onClick }) {
         </h4>
         <span style={{
           color: '#6200ea',
-          fontSize: '14px',
+          fontSize: '12px',
           fontWeight: '500'
         }}>
           ID: {customer.customer_id}
         </span>
       </div>
 
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-        <span style={{ fontSize: '16px', marginLeft: '8px', color: theme.textSecondary }}>📧</span>
-        <span style={{ color: theme.textSecondary, fontSize: '14px', direction: 'ltr' }}>
-          {customer.email || 'לא צוין'}
+      <div style={{ marginBottom: '8px' }}>
+        <span style={{ display: 'block', marginBottom: '4px', color: theme.textSecondary, fontSize: '12px', direction: 'ltr' }}>
+          📧 {customer.email || 'לא צוין'}
         </span>
-      </div>
-
-      <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
-        <span style={{ fontSize: '16px', marginLeft: '8px', color: theme.textSecondary }}>📱</span>
-        <span style={{ color: theme.textSecondary, fontSize: '14px', direction: 'ltr' }}>
-          {customer.phone || 'לא צוין'}
+        <span style={{ display: 'block', marginBottom: '4px', color: theme.textSecondary, fontSize: '12px', direction: 'ltr' }}>
+          📱 {customer.phone || 'לא צוין'}
         </span>
-      </div>
-
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span style={{ fontSize: '16px', marginLeft: '8px', color: theme.textSecondary }}>📍</span>
-        <span style={{ color: theme.textSecondary, fontSize: '14px' }}>
-          {address}
+        <span style={{ display: 'block', color: theme.textSecondary, fontSize: '12px' }}>
+          📍 {address}
         </span>
       </div>
     </div>
@@ -78,6 +70,14 @@ export default function Customers() {
   const [customerDetails, setCustomerDetails] = useState(null);
   const [customerDocuments, setCustomerDocuments] = useState([]);
   const [activeTab, setActiveTab] = useState('details');
+  const [showAddCustomer, setShowAddCustomer] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [addCustomerForm, setAddCustomerForm] = useState({
+    first_name: '',
+    last_name: '',
+    phone: '',
+    email: ''
+  });
 
   const theme = {
     textPrimary: darkMode ? '#ffffff' : '#000000',
@@ -85,6 +85,7 @@ export default function Customers() {
     cardBackground: darkMode ? '#2a2a2a' : '#f9f9f9',
     border: darkMode ? '#333' : '#e0e0e0',
     headerBg: darkMode ? '#1e1e1e' : '#f5f5f5',
+    buttonPrimary: darkMode ? '#bb86fc' : '#6200ea',
   };
 
   useEffect(() => {
@@ -146,6 +147,41 @@ export default function Customers() {
     setDarkMode(newDarkMode);
   };
 
+  // Sort and filter customers
+  const sortedAndFilteredCustomers = customers
+    .filter(customer => {
+      if (!searchTerm) return true;
+      const fullName = `${customer.first_name || ''} ${customer.last_name || ''}`.toLowerCase();
+      const phone = (customer.phone || '').toLowerCase();
+      const email = (customer.email || '').toLowerCase();
+      const search = searchTerm.toLowerCase();
+      return fullName.includes(search) || phone.includes(search) || email.includes(search);
+    })
+    .sort((a, b) => {
+      const nameA = `${a.first_name || ''} ${a.last_name || ''}`.trim().toLowerCase();
+      const nameB = `${b.first_name || ''} ${b.last_name || ''}`.trim().toLowerCase();
+      return nameA.localeCompare(nameB, 'he');
+    });
+
+  const handleAddCustomer = async () => {
+    if (!addCustomerForm.first_name || !addCustomerForm.last_name) {
+      alert('אנא הכנס שם פרטי והמשפחה');
+      return;
+    }
+
+    try {
+      // Here we would call Rivhit API to add customer
+      // For now, just show success message and refresh
+      setAddCustomerForm({ first_name: '', last_name: '', phone: '', email: '' });
+      setShowAddCustomer(false);
+      alert('הלקוח נוסף בהצלחה! (API integration pending)');
+      // Refresh customers list
+      fetchCustomers();
+    } catch (error) {
+      alert('שגיאה בהוספת הלקוח: ' + error.message);
+    }
+  };
+
   return (
     <DashboardLayout currentTab="customers">
       {(currentDarkMode, toggleDarkMode) => {
@@ -154,24 +190,85 @@ export default function Customers() {
           <div>
             <div style={{
               display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
+              flexDirection: 'column',
+              gap: '20px',
               marginBottom: '20px'
             }}>
-              <h2 style={{ color: theme.textPrimary, margin: 0 }}>לקוחות</h2>
-              <button
-                onClick={fetchCustomers}
-                style={{
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center'
+              }}>
+                <h2 style={{ color: theme.textPrimary, margin: 0 }}>לקוחות</h2>
+                <button
+                  onClick={fetchCustomers}
+                  style={{
+                    background: theme.cardBackground,
+                    border: `1px solid ${theme.border}`,
+                    color: theme.textPrimary,
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  רענן
+                </button>
+              </div>
+
+              {/* Search and Add Toolbar */}
+              <div style={{
+                display: 'flex',
+                gap: '12px',
+                flexWrap: 'wrap',
+                alignItems: 'center'
+              }}>
+                <div style={{
+                  display: 'flex',
+                  gap: '8px',
+                  alignItems: 'center',
                   background: theme.cardBackground,
                   border: `1px solid ${theme.border}`,
-                  color: theme.textPrimary,
-                  padding: '8px 16px',
-                  borderRadius: '6px',
-                  cursor: 'pointer'
-                }}
-              >
-                רענן
-              </button>
+                  borderRadius: '8px',
+                  padding: '8px 12px',
+                  flex: 1,
+                  minWidth: '200px'
+                }}>
+                  <span style={{ color: theme.textSecondary, fontSize: '16px' }}>🔍</span>
+                  <input
+                    type="text"
+                    placeholder="חפש לפי שם, טלפון או מייל..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    style={{
+                      border: 'none',
+                      background: 'none',
+                      outline: 'none',
+                      color: theme.textPrimary,
+                      fontSize: '14px',
+                      width: '100%'
+                    }}
+                  />
+                </div>
+                <button
+                  onClick={() => setShowAddCustomer(true)}
+                  style={{
+                    background: theme.buttonPrimary,
+                    color: 'white',
+                    border: 'none',
+                    padding: '10px 20px',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    fontSize: '14px',
+                    fontWeight: '500',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px'
+                  }}
+                >
+                  <span>+</span>
+                  לקוח חדש
+                </button>
+              </div>
             </div>
 
             {loading && (
@@ -226,7 +323,7 @@ export default function Customers() {
               </div>
             )}
 
-            {!loading && !error && customers.length > 0 && (
+            {!loading && !error && sortedAndFilteredCustomers.length > 0 && (
               <div>
                 <div style={{
                   padding: '15px 20px',
@@ -236,11 +333,11 @@ export default function Customers() {
                   fontWeight: '600',
                   color: theme.textPrimary
                 }}>
-                  נמצאו {customers.length} לקוחות
+                  נמצאו {sortedAndFilteredCustomers.length} מתוך {customers.length} לקוחות
                 </div>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
                   gap: '15px',
                   padding: '20px',
                   backgroundColor: theme.cardBackground,
@@ -248,7 +345,7 @@ export default function Customers() {
                   borderTop: 'none',
                   borderRadius: '0 0 12px 12px'
                 }}>
-                  {customers.map(customer => (
+                  {sortedAndFilteredCustomers.map(customer => (
                     <CustomerCard
                       key={customer.customer_id}
                       customer={customer}
@@ -260,6 +357,35 @@ export default function Customers() {
                     />
                   ))}
                 </div>
+              </div>
+            )}
+
+            {!loading && !error && customers.length > 0 && searchTerm && sortedAndFilteredCustomers.length === 0 && (
+              <div style={{
+                textAlign: 'center',
+                padding: '40px',
+                color: theme.textSecondary,
+                backgroundColor: theme.cardBackground,
+                border: `1px solid ${theme.border}`,
+                borderRadius: '12px'
+              }}>
+                <div style={{ fontSize: '48px', marginBottom: '15px' }}>🔍</div>
+                <h3 style={{ color: theme.textPrimary, margin: '0 0 10px 0' }}>לא נמצאו תוצאות</h3>
+                <p>נסה מונח חיפוש אחר או נקה את החיפוש</p>
+                <button
+                  onClick={() => setSearchTerm('')}
+                  style={{
+                    background: theme.buttonPrimary,
+                    color: 'white',
+                    border: 'none',
+                    padding: '8px 16px',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    marginTop: '10px'
+                  }}
+                >
+                  נקה חיפוש
+                </button>
               </div>
             )}
 
@@ -394,6 +520,188 @@ export default function Customers() {
                       }}
                     >
                       ערוך פרטים
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Add Customer Modal */}
+            {showAddCustomer && (
+              <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 1000,
+                padding: '20px'
+              }}>
+                <div style={{
+                  backgroundColor: theme.cardBackground,
+                  borderRadius: '12px',
+                  width: '90%',
+                  maxWidth: '500px',
+                  padding: '24px'
+                }}>
+                  <h2 style={{
+                    margin: '0 0 20px 0',
+                    color: theme.textPrimary,
+                    fontSize: '24px'
+                  }}>
+                    הוספת לקוח חדש
+                  </h2>
+
+                  <div style={{ display: 'grid', gap: '16px' }}>
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        marginBottom: '6px',
+                        color: theme.textPrimary,
+                        fontWeight: '500',
+                        fontSize: '14px'
+                      }}>
+                        שם פרטי *
+                      </label>
+                      <input
+                        type="text"
+                        value={addCustomerForm.first_name}
+                        onChange={(e) => setAddCustomerForm(prev => ({ ...prev, first_name: e.target.value }))}
+                        style={{
+                          width: '100%',
+                          padding: '10px',
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '6px',
+                          backgroundColor: theme.headerBg,
+                          color: theme.textPrimary,
+                          fontSize: '14px'
+                        }}
+                        placeholder="הכנס שם פרטי"
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        marginBottom: '6px',
+                        color: theme.textPrimary,
+                        fontWeight: '500',
+                        fontSize: '14px'
+                      }}>
+                        שם משפחה *
+                      </label>
+                      <input
+                        type="text"
+                        value={addCustomerForm.last_name}
+                        onChange={(e) => setAddCustomerForm(prev => ({ ...prev, last_name: e.target.value }))}
+                        style={{
+                          width: '100%',
+                          padding: '10px',
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '6px',
+                          backgroundColor: theme.headerBg,
+                          color: theme.textPrimary,
+                          fontSize: '14px'
+                        }}
+                        placeholder="הכנס שם משפחה"
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        marginBottom: '6px',
+                        color: theme.textPrimary,
+                        fontWeight: '500',
+                        fontSize: '14px'
+                      }}>
+                        טלפון
+                      </label>
+                      <input
+                        type="text"
+                        value={addCustomerForm.phone}
+                        onChange={(e) => setAddCustomerForm(prev => ({ ...prev, phone: e.target.value }))}
+                        style={{
+                          width: '100%',
+                          padding: '10px',
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '6px',
+                          backgroundColor: theme.headerBg,
+                          color: theme.textPrimary,
+                          fontSize: '14px',
+                          direction: 'ltr'
+                        }}
+                        placeholder="050-1234567"
+                      />
+                    </div>
+
+                    <div>
+                      <label style={{
+                        display: 'block',
+                        marginBottom: '6px',
+                        color: theme.textPrimary,
+                        fontWeight: '500',
+                        fontSize: '14px'
+                      }}>
+                        מייל
+                      </label>
+                      <input
+                        type="email"
+                        value={addCustomerForm.email}
+                        onChange={(e) => setAddCustomerForm(prev => ({ ...prev, email: e.target.value }))}
+                        style={{
+                          width: '100%',
+                          padding: '10px',
+                          border: `1px solid ${theme.border}`,
+                          borderRadius: '6px',
+                          backgroundColor: theme.headerBg,
+                          color: theme.textPrimary,
+                          fontSize: '14px',
+                          direction: 'ltr'
+                        }}
+                        placeholder="email@example.com"
+                      />
+                    </div>
+                  </div>
+
+                  <div style={{
+                    display: 'flex',
+                    gap: '12px',
+                    justifyContent: 'flex-end',
+                    marginTop: '24px'
+                  }}>
+                    <button
+                      onClick={() => setShowAddCustomer(false)}
+                      style={{
+                        padding: '8px 16px',
+                        border: `1px solid ${theme.border}`,
+                        background: 'none',
+                        color: theme.textPrimary,
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontSize: '14px'
+                      }}
+                    >
+                      ביטול
+                    </button>
+                    <button
+                      onClick={handleAddCustomer}
+                      style={{
+                        padding: '8px 16px',
+                        background: theme.buttonPrimary,
+                        color: 'white',
+                        border: 'none',
+                        borderRadius: '6px',
+                        cursor: 'pointer',
+                        fontSize: '14px',
+                        fontWeight: '500'
+                      }}
+                    >
+                      הוסף לקוח
                     </button>
                   </div>
                 </div>

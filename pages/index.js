@@ -94,13 +94,7 @@ function DashboardContent({ darkMode }) {
 
   return (
     <div>
-      <div style={{
-        display: 'flex',
-        gap: '20px',
-        alignItems: 'center',
-        marginBottom: '30px',
-        flexWrap: 'wrap'
-      }}>
+      <div style={{ marginBottom: '30px' }}>
         <h1 style={{
           color: theme.textPrimary,
           margin: '0',
@@ -108,84 +102,6 @@ function DashboardContent({ darkMode }) {
         }}>
           דאשבורד
         </h1>
-
-        {/* Mobile: Add customer button first */}
-        <button
-          onClick={() => setShowAddCustomer(true)}
-          style={{
-            background: theme.buttonPrimary,
-            color: 'white',
-            border: 'none',
-            padding: '12px 16px',
-            borderRadius: '8px',
-            cursor: 'pointer',
-            fontSize: '14px',
-            fontWeight: '500',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '6px',
-            order: window?.innerWidth < 768 ? -1 : 0
-          }}
-        >
-          <span>➕</span>
-          <span style={{ display: window?.innerWidth < 480 ? 'none' : 'inline' }}>לקוח חדש</span>
-        </button>
-
-        {/* Search bar - responsive */}
-        <div style={{
-          display: 'flex',
-          gap: '12px',
-          alignItems: 'center',
-          background: theme.cardBackground,
-          border: `1px solid ${theme.border}`,
-          borderRadius: '8px',
-          padding: '8px 12px',
-          marginLeft: 'auto',
-          width: window?.innerWidth < 768 ? 'calc(100% - 40px)' : 'auto',
-          minWidth: window?.innerWidth < 480 ? '200px' : '250px'
-        }}>
-          <span style={{ color: theme.textSecondary, fontSize: '16px' }}>🔍</span>
-          <input
-            type="text"
-            placeholder={window?.innerWidth < 480 ? "חיפוש..." : "חפש לקוחות..."}
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{
-              border: 'none',
-              background: 'none',
-              outline: 'none',
-              color: theme.textPrimary,
-              fontSize: '14px',
-              width: '100%',
-              minWidth: '120px'
-            }}
-          />
-        </div>
-
-        <style jsx>{`
-          @media (max-width: 768px) {
-            div[style*="display: flex"][style*="flex-wrap: wrap"] {
-              flex-direction: column !important;
-              gap: 15px !important;
-            }
-            div[style*="display: flex"][style*="flex-wrap: wrap"] > h1 {
-              font-size: 24px !important;
-            }
-            div[style*="margin-left: auto"] {
-              margin-left: 0 !important;
-              width: 100% !important;
-              order: 1;
-            }
-          }
-          @media (max-width: 480px) {
-            div[style*="display: flex"][style*="flex-wrap: wrap"] > h1 {
-              font-size: 20px !important;
-            }
-            div[style*="background: theme.cardBackground"] {
-              font-size: 12px !important;
-            }
-          }
-        `}</style>
       </div>
 
       {/* Statistics Cards */}
