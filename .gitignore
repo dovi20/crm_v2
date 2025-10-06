@@ -43,6 +43,14 @@ pids
 *.seed
 *.pid.lock
 
+# API Documentation
+*.pdf
+rivhit_api_rest.pdf
+
+# Test files
+test-api.js
+test*.js
+
 # Coverage directory used by tools like istanbul
 coverage/
 
