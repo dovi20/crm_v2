@@ -36,6 +36,28 @@ export default function DashboardLayout({ children, currentTab }) {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const theme = {
+    outerBackground: darkMode ? '#121212' : '#ffffff',
+    sidebarBackground: darkMode ? '#1e1e1e' : '#ffffff',
+    sidebarBorder: darkMode ? '#333' : '#e0e0e0',
+    sidebarText: darkMode ? '#e0e0e0' : '#333',
+    innerBackground: darkMode ? '#1e1e1e' : '#ffffff',
+    tabActive: darkMode ? '#bb86fc' : '#6200ea',
+    tabHover: darkMode ? '#333' : '#f5f5f5',
+    tabInactive: 'transparent',
+    textPrimary: darkMode ? '#ffffff' : '#000000',
+    textSecondary: darkMode ? '#b0b0b0' : '#666666',
+    cardBackground: darkMode ? '#2a2a2a' : '#f9f9f9',
+    buttonPrimary: darkMode ? '#bb86fc' : '#6200ea',
+    buttonDanger: '#dc3545',
+    shadow: darkMode ? '0 2px 8px rgba(0, 0, 0, 0.3)' : '0 2px 8px rgba(0, 0, 0, 0.1)',
+    border: darkMode ? '#333' : '#e0e0e0'
+  };
+
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
   useEffect(() => {
     if (status === 'loading') return;
     if (!session) router.push('/login');
@@ -45,7 +67,7 @@ export default function DashboardLayout({ children, currentTab }) {
     return (
       <div style={{
         minHeight: '100vh',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        backgroundColor: theme.outerBackground,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -53,18 +75,18 @@ export default function DashboardLayout({ children, currentTab }) {
       }}>
         <div style={{
           textAlign: 'center',
-          color: 'white'
+          color: theme.textPrimary
         }}>
           <div style={{
-            width: '60px',
-            height: '60px',
-            border: '4px solid rgba(255, 255, 255, 0.3)',
-            borderTop: '4px solid white',
+            width: '48px',
+            height: '48px',
+            border: `3px solid ${theme.border}`,
+            borderTop: `3px solid ${theme.tabActive}`,
             borderRadius: '50%',
-            margin: '0 auto 20px',
+            margin: '0 auto 16px',
             animation: 'spin 1s linear infinite'
           }}></div>
-          <h2 style={{ margin: 0, fontSize: '24px' }}>טוען...</h2>
+          <h3 style={{ margin: 0, fontSize: '18px', fontWeight: '500' }}>טוען...</h3>
         </div>
       </div>
     );
@@ -74,22 +96,8 @@ export default function DashboardLayout({ children, currentTab }) {
     return null;
   }
 
-  const theme = {
-    outerBackground: darkMode ? '#1a1a1a' : '#f8f9fa',
-    sidebarBackground: darkMode ? '#34495e' : '#f8f9fa',
-    sidebarText: darkMode ? 'white' : '#333',
-    innerBackground: darkMode ? '#2a2a2a' : 'white',
-    tabActive: darkMode ? '#444' : '#0070f3',
-    tabInactive: darkMode ? '#3a3a3a' : '#f8f9fa',
-    textPrimary: darkMode ? 'white' : '#333',
-    textSecondary: darkMode ? '#ccc' : '#6c757d',
-    cardBackground: darkMode ? '#3a3a3a' : '#f8f9fa',
-    buttonPrimary: 'linear-gradient(135deg, #0070f3, #0051cc)',
-    buttonDanger: 'linear-gradient(135deg, #dc3545, #c82333)',
-    shadow: darkMode ? '0 10px 40px rgba(0, 0, 0, 0.3)' : '0 10px 40px rgba(0, 0, 0, 0.1)'
-  };
-
   const tabs = [
+    { id: 'index', label: 'דאשבורד', icon: '🏠', color: '#9b59b6', href: '/' },
     { id: 'products', label: 'מוצרים', icon: '📦', color: '#3498db', href: '/products' },
     { id: 'customers', label: 'לקוחות', icon: '👥', color: '#e74c3c', href: '/customers' },
     { id: 'settings', label: 'הגדרות', icon: '⚙️', color: '#27ae60', href: '/settings' }
@@ -99,24 +107,24 @@ export default function DashboardLayout({ children, currentTab }) {
     <div style={{
       minHeight: '100vh',
       backgroundColor: theme.outerBackground,
-      fontFamily: 'Arial, sans-serif',
-      direction: 'rtl',
-      padding: '10px'
+      fontFamily: 'Inter, sans-serif',
+      direction: 'rtl'
     }}>
       {isMobile && (
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           style={{
             position: 'absolute',
-            top: '20px',
-            left: '20px',
+            top: '15px',
+            left: '15px',
             backgroundColor: theme.sidebarBackground,
             color: theme.sidebarText,
-            border: 'none',
-            padding: '10px',
-            borderRadius: '5px',
+            border: `1px solid ${theme.border}`,
+            padding: '8px',
+            borderRadius: '6px',
             cursor: 'pointer',
-            zIndex: 1001
+            zIndex: 1001,
+            boxShadow: theme.shadow
           }}
         >
           ☰
@@ -124,24 +132,23 @@ export default function DashboardLayout({ children, currentTab }) {
       )}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: '280px 1fr',
-        gap: '20px',
-        minHeight: 'calc(100vh - 20px)'
+        gridTemplateColumns: '260px 1fr',
+        minHeight: '100vh'
       }}
       className="dashboard-wrapper">
         {/* Sidebar */}
         <div style={{
-          width: '280px',
+          width: '260px',
           backgroundColor: theme.sidebarBackground,
           color: theme.sidebarText,
-          padding: '20px',
-          boxShadow: theme.shadow,
+          padding: '24px 20px',
+          borderRight: `1px solid ${theme.sidebarBorder}`,
           display: isMobile ? (isSidebarOpen ? 'flex' : 'none') : 'flex',
           flexDirection: 'column',
           position: isMobile ? 'fixed' : 'static',
           top: isMobile ? '0' : 'auto',
           left: isMobile ? '0' : 'auto',
-          height: isMobile ? '100vh' : 'auto',
+          height: isMobile ? '100vh' : '100%',
           zIndex: isMobile ? '1000' : 'auto',
           direction: 'ltr'
         }}>
@@ -160,21 +167,20 @@ export default function DashboardLayout({ children, currentTab }) {
                 <a style={{ textDecoration: 'none' }}>
                   <div
                     style={{
-                      backgroundColor: currentTab === tab.id ? (darkMode ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.1)') : 'transparent',
-                      padding: '15px 20px',
-                      marginBottom: '10px',
+                      backgroundColor: currentTab === tab.id ? theme.tabActive : 'transparent',
+                      color: currentTab === tab.id ? 'white' : theme.sidebarText,
+                      padding: '12px 16px',
+                      marginBottom: '4px',
                       borderRadius: '8px',
                       cursor: 'pointer',
-                      transition: 'all 0.3s ease',
+                      transition: 'all 0.2s ease',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '15px',
-                      borderLeft: currentTab === tab.id ? `4px solid ${tab.color}` : '4px solid transparent'
+                      gap: '12px'
                     }}
                     onMouseOver={(e) => {
                       if (currentTab !== tab.id) {
-                        const rgba = darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)';
-                        e.target.style.backgroundColor = rgba;
+                        e.target.style.backgroundColor = theme.tabHover;
                       }
                     }}
                     onMouseOut={(e) => {
@@ -183,11 +189,10 @@ export default function DashboardLayout({ children, currentTab }) {
                       }
                     }}
                   >
-                    <span style={{ fontSize: '20px', color: tab.color }}>{tab.icon}</span>
+                    <span style={{ fontSize: '18px', color: currentTab === tab.id ? 'white' : tab.color }}>{tab.icon}</span>
                     <span style={{
-                      color: theme.sidebarText,
-                      fontSize: '16px',
-                      fontWeight: currentTab === tab.id ? 'bold' : 'normal'
+                      fontSize: '15px',
+                      fontWeight: currentTab === tab.id ? '600' : '400'
                     }}>{tab.label}</span>
                   </div>
                 </a>
@@ -200,20 +205,21 @@ export default function DashboardLayout({ children, currentTab }) {
           }}>
             <div style={{
               fontSize: '14px',
-              color: darkMode ? '#ccc' : '#bdc3c7',
+              color: theme.textSecondary,
               marginBottom: '10px'
             }}>
               שלום, {session.user?.username || session.user?.email}
             </div>
             <button onClick={handleSignOut} style={{
-              backgroundColor: '#e74c3c',
+              backgroundColor: theme.buttonDanger,
               color: 'white',
               border: 'none',
               padding: '10px 15px',
-              borderRadius: '5px',
+              borderRadius: '6px',
               cursor: 'pointer',
               width: '100%',
-              fontSize: '14px'
+              fontSize: '14px',
+              fontWeight: '500'
             }}>
               התנתק
             </button>
@@ -224,23 +230,24 @@ export default function DashboardLayout({ children, currentTab }) {
         <div style={{
           flex: 1,
           padding: '30px',
-          backgroundColor: darkMode ? theme.innerBackground : '#f0f2f5'
+          backgroundColor: theme.innerBackground
         }}>
           <div style={{
-            backgroundColor: darkMode ? '#2a2a2a' : 'white',
+            backgroundColor: theme.cardBackground,
+            border: `1px solid ${theme.border}`,
             borderRadius: '12px',
             padding: '30px',
             minHeight: 'calc(100vh - 120px)',
             boxShadow: theme.shadow,
             animation: 'fadeIn 0.3s ease-in-out'
           }}>
-            {typeof children === 'function' ? children(darkMode) : children}
+            {typeof children === 'function' ? children(darkMode, toggleDarkMode) : children}
             {/* Footer inside content */}
             <div style={{
               marginTop: '30px',
               padding: '15px',
               backgroundColor: 'transparent',
-              borderTop: `1px solid ${theme.cardBackground}`,
+              borderTop: `1px solid ${theme.border}`,
               textAlign: 'center',
               fontSize: '12px',
               color: theme.textSecondary
