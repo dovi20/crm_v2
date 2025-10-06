@@ -10,39 +10,13 @@ export default async function handler(req, res) {
 
     // Get all items to calculate total stock
     const items = await api.getItems();
+    console.log('Items from Rivhit:', items); // Debug log
     const totalStock = items.reduce((sum, item) => sum + (item.quantity || 0), 0);
+    console.log('Total stock calculated:', totalStock); // Debug log
 
-    // Get all documents (sales/invoices) for the last month to calculate orders and revenue
-    const oneMonthAgo = new Date();
-    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1);
-
-    const documentsResponse = await fetch('https://api.rivhit.co.il/online/RivhitOnlineAPI.svc/Document.List', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        api_token: api.apiToken,
-        from_date: oneMonthAgo.toLocaleDateString('he-IL'),
-        to_date: new Date().toLocaleDateString('he-IL'),
-        // Filter for sales documents (document_type might be 1 for sales, adjust as needed)
-        document_type: 1 // Assuming 1 is for sales invoices
-      })
-    });
-
-    const documentsResult = await documentsResponse.json();
-
-    if (documentsResult.error_code !== 0) {
-      throw new Error(`API Error ${documentsResult.error_code}: ${documentsResult.client_message || documentsResult.debug_message}`);
-    }
-
-    const documents = documentsResult.data?.document_list || [];
-
-    // Calculate total orders (number of sales documents)
-    const totalOrders = documents.length;
-
-    // Calculate total revenue (sum of document totals)
-    const totalRevenue = documents.reduce((sum, doc) => sum + (doc.total_nis || 0), 0);
+    // For now, let's use mock data for orders and revenue since we need to verify the API structure
+    const totalOrders = 0; // Will be implemented after testing items
+    const totalRevenue = 0; // Will be implemented after testing items
 
     res.status(200).json({
       success: true,

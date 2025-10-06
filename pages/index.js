@@ -61,6 +61,7 @@ function DashboardContent({ darkMode }) {
     try {
       const response = await fetch('/api/stats/dashboard');
       const result = await response.json();
+      console.log('Dashboard API response:', result); // Debug log
       if (result.success) {
         setStats(prev => ({
           ...prev,
