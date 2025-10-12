@@ -14,10 +14,10 @@ export default function Home() {
 
 function DashboardContent({ darkMode }) {
   const [stats, setStats] = useState({
-    totalProducts: 125,
+    totalProducts: 0,
     totalCustomers: null, // Will be loaded from API
-    totalOrders: 47,
-    revenue: '₪45,230'
+    totalOrders: 0,
+    revenue: 0
   });
   const [searchTerm, setSearchTerm] = useState('');
   const [showAddCustomer, setShowAddCustomer] = useState(false);
@@ -44,6 +44,7 @@ function DashboardContent({ darkMode }) {
 
   useEffect(() => {
     fetchCustomerCount();
+    fetchDashboardStats();
   }, []);
 
   useEffect(() => {
@@ -66,8 +67,24 @@ function DashboardContent({ darkMode }) {
       }
     } catch (error) {
       console.error('Failed to fetch customer count:', error);
-    } finally {
-      setStatsLoading(false);
+    }
+  };
+
+  const fetchDashboardStats = async () => {
+    try {
+      const response = await fetch('/api/stats/dashboard');
+      const result = await response.json();
+      console.log('Dashboard API response:', result); // Debug log
+      if (result.success) {
+        setStats(prev => ({
+          ...prev,
+          totalProducts: result.data.totalProducts,
+          totalOrders: result.data.totalOrders,
+          revenue: result.data.revenue
+        }));
+      }
+    } catch (error) {
+      console.error('Failed to fetch dashboard stats:', error);
     }
   };
 
@@ -440,7 +457,21 @@ function ActionCard({ action, theme, isMobile }) {
   );
 }
 
+<<<<<<< HEAD
 function StatCard({ title, value, icon, color, theme, isMobile, isSmallMobile }) {
+=======
+function StatCard({ title, value, icon, color, theme }) {
+  const formatValue = (val, title) => {
+    if (val === null || val === undefined) return 'טוען...';
+
+    if (title.includes('הכנסות')) {
+      return `₪${val.toLocaleString()}`;
+    }
+
+    return val.toLocaleString();
+  };
+
+>>>>>>> 8b6e8e6052f55d11c85849b4c8db54908f1fb279
   return (
     <div style={{
       backgroundColor: theme.cardBackground,
@@ -475,7 +506,7 @@ function StatCard({ title, value, icon, color, theme, isMobile, isSmallMobile })
         margin: '0',
         fontSize: isMobile ? '24px' : '28px',
         fontWeight: 'bold'
-      }}>{value}</p>
+      }}>{formatValue(value, title)}</p>
     </div>
   );
 }
