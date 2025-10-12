@@ -28,6 +28,8 @@ function DashboardContent({ darkMode }) {
     email: ''
   });
   const [statsLoading, setStatsLoading] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSmallMobile, setIsSmallMobile] = useState(false);
 
   const theme = {
     textPrimary: darkMode ? '#ffffff' : '#000000',
@@ -42,6 +44,17 @@ function DashboardContent({ darkMode }) {
 
   useEffect(() => {
     fetchCustomerCount();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsSmallMobile(window.innerWidth <= 480);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const fetchCustomerCount = async () => {
@@ -93,12 +106,12 @@ function DashboardContent({ darkMode }) {
   ];
 
   return (
-    <div>
-      <div style={{ marginBottom: '30px' }}>
+    <div style={{ paddingLeft: isMobile ? '0' : '0' }}>
+      <div style={{ marginBottom: isMobile ? '25px' : '30px' }}>
         <h1 style={{
           color: theme.textPrimary,
           margin: '0',
-          fontSize: '28px'
+          fontSize: isMobile ? '24px' : '28px'
         }}>
           דאשבורד
         </h1>
@@ -107,14 +120,14 @@ function DashboardContent({ darkMode }) {
       {/* Statistics Cards */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-        gap: '20px',
-        marginBottom: '40px'
+        gridTemplateColumns: isSmallMobile ? '1fr' : isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(250px, 1fr))',
+        gap: isMobile ? '15px' : '20px',
+        marginBottom: isMobile ? '30px' : '40px'
       }}>
-        <StatCard title="סה״כ מוצרים" value={stats.totalProducts} icon="📦" color="#3498db" theme={theme} />
-        <StatCard title="סה״כ לקוחות" value={stats.totalCustomers} icon="👥" color="#e74c3c" theme={theme} />
-        <StatCard title="סה״כ הזמנות" value={stats.totalOrders} icon="📋" color="#27ae60" theme={theme} />
-        <StatCard title="הכנסות חודשיות" value={stats.revenue} icon="💰" color="#f39c12" theme={theme} />
+        <StatCard title="סה״כ מוצרים" value={stats.totalProducts} icon="📦" color="#3498db" theme={theme} isMobile={isMobile} isSmallMobile={isSmallMobile} />
+        <StatCard title="סה״כ לקוחות" value={stats.totalCustomers} icon="👥" color="#e74c3c" theme={theme} isMobile={isMobile} isSmallMobile={isSmallMobile} />
+        <StatCard title="סה״כ הזמנות" value={stats.totalOrders} icon="📋" color="#27ae60" theme={theme} isMobile={isMobile} isSmallMobile={isSmallMobile} />
+        <StatCard title="הכנסות חודשיות" value={stats.revenue} icon="💰" color="#f39c12" theme={theme} isMobile={isMobile} isSmallMobile={isSmallMobile} />
       </div>
 
       {/* Recent Activity */}
@@ -122,22 +135,44 @@ function DashboardContent({ darkMode }) {
         backgroundColor: theme.cardBackground,
         border: `1px solid ${theme.border}`,
         borderRadius: '12px',
-        padding: '25px',
-        marginBottom: '30px'
+        padding: isMobile ? '20px' : '25px',
+        marginBottom: isMobile ? '25px' : '30px'
       }}>
-        <h2 style={{ color: theme.textPrimary, margin: '0 0 20px 0', fontSize: '20px' }}>פעילות אחרונה</h2>
+        <h2 style={{
+          color: theme.textPrimary,
+          margin: '0 0 20px 0',
+          fontSize: isMobile ? '18px' : '20px'
+        }}>פעילות אחרונה</h2>
         <div style={{ color: theme.textSecondary }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: `1px solid ${theme.border}` }}>
-            <span>מוצר חדש הוסף</span>
-            <span style={{ fontSize: '12px' }}>לפני 2 שעות</span>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: isMobile ? '8px 0' : '10px 0',
+            borderBottom: `1px solid ${theme.border}`
+          }}>
+            <span style={{ fontSize: isMobile ? '14px' : '16px' }}>מוצר חדש הוסף</span>
+            <span style={{ fontSize: isMobile ? '11px' : '12px' }}>לפני 2 שעות</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: `1px solid ${theme.border}` }}>
-            <span>לקוח חדש רשום</span>
-            <span style={{ fontSize: '12px' }}>אתמול</span>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: isMobile ? '8px 0' : '10px 0',
+            borderBottom: `1px solid ${theme.border}`
+          }}>
+            <span style={{ fontSize: isMobile ? '14px' : '16px' }}>לקוח חדש רשום</span>
+            <span style={{ fontSize: isMobile ? '11px' : '12px' }}>אתמול</span>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: `1px solid ${theme.border}` }}>
-            <span>הזמנה בוצעה</span>
-            <span style={{ fontSize: '12px' }}>לפני 3 ימים</span>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: isMobile ? '8px 0' : '10px 0',
+            borderBottom: `1px solid ${theme.border}`
+          }}>
+            <span style={{ fontSize: isMobile ? '14px' : '16px' }}>הזמנה בוצעה</span>
+            <span style={{ fontSize: isMobile ? '11px' : '12px' }}>לפני 3 ימים</span>
           </div>
         </div>
       </div>
@@ -147,16 +182,20 @@ function DashboardContent({ darkMode }) {
         backgroundColor: theme.cardBackground,
         border: `1px solid ${theme.border}`,
         borderRadius: '12px',
-        padding: '25px'
+        padding: isMobile ? '20px' : '25px'
       }}>
-        <h2 style={{ color: theme.textPrimary, margin: '0 0 20px 0', fontSize: '20px' }}>פעולות מהירות</h2>
+        <h2 style={{
+          color: theme.textPrimary,
+          margin: '0 0 20px 0',
+          fontSize: isMobile ? '18px' : '20px'
+        }}>פעולות מהירות</h2>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: '20px'
+          gridTemplateColumns: isSmallMobile ? '1fr' : isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(200px, 1fr))',
+          gap: isMobile ? '15px' : '20px'
         }}>
           {quickActions.map(action => (
-            <ActionCard key={action.label} action={action} theme={theme} />
+            <ActionCard key={action.label} action={action} theme={theme} isMobile={isMobile} />
           ))}
         </div>
       </div>
@@ -174,14 +213,16 @@ function DashboardContent({ darkMode }) {
           alignItems: 'center',
           justifyContent: 'center',
           zIndex: 1000,
-          padding: '20px'
+          padding: isMobile ? '10px' : '20px'
         }}>
           <div style={{
             backgroundColor: theme.cardBackground,
             borderRadius: '12px',
-            width: '90%',
-            maxWidth: '500px',
-            padding: '24px'
+            width: isSmallMobile ? '100%' : isMobile ? '95%' : '90%',
+            maxWidth: isMobile ? 'none' : '500px',
+            padding: isMobile ? '20px' : '24px',
+            maxHeight: isMobile ? '90vh' : 'none',
+            overflowY: isMobile ? 'auto' : 'visible'
           }}>
             <h2 style={{
               margin: '0 0 20px 0',
@@ -305,20 +346,24 @@ function DashboardContent({ darkMode }) {
 
             <div style={{
               display: 'flex',
-              gap: '12px',
+              gap: isMobile ? '10px' : '12px',
               justifyContent: 'flex-end',
-              marginTop: '24px'
+              marginTop: isMobile ? '20px' : '24px',
+              flexDirection: isSmallMobile ? 'column' : 'row'
             }}>
               <button
                 onClick={() => setShowAddCustomer(false)}
                 style={{
-                  padding: '8px 16px',
+                  padding: isMobile ? '12px 20px' : '8px 16px',
                   border: `1px solid ${theme.border}`,
                   background: 'none',
                   color: theme.textPrimary,
                   borderRadius: '6px',
                   cursor: 'pointer',
-                  fontSize: '14px'
+                  fontSize: isMobile ? '16px' : '14px',
+                  fontWeight: '500',
+                  minHeight: isMobile ? '44px' : 'auto',
+                  flex: isSmallMobile ? '1' : 'none'
                 }}
               >
                 ביטול
@@ -326,14 +371,16 @@ function DashboardContent({ darkMode }) {
               <button
                 onClick={handleAddCustomer}
                 style={{
-                  padding: '8px 16px',
+                  padding: isMobile ? '12px 20px' : '8px 16px',
                   background: theme.buttonPrimary,
                   color: 'white',
                   border: 'none',
                   borderRadius: '6px',
                   cursor: 'pointer',
-                  fontSize: '14px',
-                  fontWeight: '500'
+                  fontSize: isMobile ? '16px' : '14px',
+                  fontWeight: '500',
+                  minHeight: isMobile ? '44px' : 'auto',
+                  flex: isSmallMobile ? '1' : 'none'
                 }}
               >
                 הוסף לקוח
@@ -346,7 +393,7 @@ function DashboardContent({ darkMode }) {
   );
 }
 
-function ActionCard({ action, theme }) {
+function ActionCard({ action, theme, isMobile }) {
   return (
     <Link href={action.href} style={{ textDecoration: 'none' }}>
       <div
@@ -354,39 +401,57 @@ function ActionCard({ action, theme }) {
           backgroundColor: theme.cardBackground,
           border: `1px solid ${theme.border}`,
           borderRadius: '8px',
-          padding: '20px',
+          padding: isMobile ? '16px' : '20px',
           cursor: 'pointer',
           transition: 'all 0.2s ease',
-          textAlign: 'center'
+          textAlign: 'center',
+          minHeight: isMobile ? '100px' : 'auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center'
         }}
         onMouseEnter={(e) => {
-          e.target.style.transform = 'translateY(-2px)';
-          e.target.style.boxShadow = `0 4px 12px ${theme.shadow}`;
+          if (!isMobile) {
+            e.target.style.transform = 'translateY(-2px)';
+            e.target.style.boxShadow = `0 4px 12px ${theme.shadow}`;
+          }
         }}
         onMouseLeave={(e) => {
-          e.target.style.transform = 'translateY(0)';
-          e.target.style.boxShadow = 'none';
+          if (!isMobile) {
+            e.target.style.transform = 'translateY(0)';
+            e.target.style.boxShadow = 'none';
+          }
         }}
       >
-        <span style={{ fontSize: '40px', marginBottom: '10px', display: 'block', color: action.color }}>{action.icon}</span>
-        <span style={{ color: theme.textPrimary, fontWeight: '500' }}>{action.label}</span>
+        <span style={{
+          fontSize: isMobile ? '32px' : '40px',
+          marginBottom: '8px',
+          display: 'block',
+          color: action.color
+        }}>{action.icon}</span>
+        <span style={{
+          color: theme.textPrimary,
+          fontWeight: '500',
+          fontSize: isMobile ? '14px' : '16px'
+        }}>{action.label}</span>
       </div>
     </Link>
   );
 }
 
-function StatCard({ title, value, icon, color, theme }) {
+function StatCard({ title, value, icon, color, theme, isMobile, isSmallMobile }) {
   return (
     <div style={{
       backgroundColor: theme.cardBackground,
       border: `1px solid ${theme.border}`,
       borderRadius: '12px',
-      padding: '25px',
+      padding: isMobile ? '20px' : '25px',
       textAlign: 'center'
     }}>
       <div style={{
-        width: '60px',
-        height: '60px',
+        width: isMobile ? '50px' : '60px',
+        height: isMobile ? '50px' : '60px',
         borderRadius: '50%',
         backgroundColor: color + '20',
         display: 'flex',
@@ -394,18 +459,21 @@ function StatCard({ title, value, icon, color, theme }) {
         justifyContent: 'center',
         margin: '0 auto 15px'
       }}>
-        <span style={{ fontSize: '28px', color: color }}>{icon}</span>
+        <span style={{
+          fontSize: isMobile ? '24px' : '28px',
+          color: color
+        }}>{icon}</span>
       </div>
       <h3 style={{
         color: theme.textPrimary,
         margin: '0 0 10px 0',
-        fontSize: '14px',
+        fontSize: isMobile ? '13px' : '14px',
         fontWeight: '400'
       }}>{title}</h3>
       <p style={{
         color: color,
         margin: '0',
-        fontSize: '28px',
+        fontSize: isMobile ? '24px' : '28px',
         fontWeight: 'bold'
       }}>{value}</p>
     </div>

@@ -114,20 +114,36 @@ export default function DashboardLayout({ children, currentTab }) {
         <button
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           style={{
-            position: 'absolute',
-            top: '15px',
-            left: '15px',
+            position: 'fixed',
+            top: '20px',
+            left: '20px',
+            width: '48px',
+            height: '48px',
             backgroundColor: theme.sidebarBackground,
             color: theme.sidebarText,
-            border: `1px solid ${theme.border}`,
-            padding: '8px',
-            borderRadius: '6px',
+            border: `2px solid ${theme.border}`,
+            borderRadius: '12px',
             cursor: 'pointer',
             zIndex: 1001,
-            boxShadow: theme.shadow
+            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '20px',
+            fontWeight: 'bold',
+            transition: 'all 0.2s ease',
+            transform: isSidebarOpen ? 'rotate(90deg)' : 'rotate(0deg)'
+          }}
+          onMouseEnter={(e) => {
+            e.target.style.backgroundColor = theme.tabHover;
+            e.target.style.transform = isSidebarOpen ? 'rotate(90deg) scale(1.05)' : 'rotate(0deg) scale(1.05)';
+          }}
+          onMouseLeave={(e) => {
+            e.target.style.backgroundColor = theme.sidebarBackground;
+            e.target.style.transform = isSidebarOpen ? 'rotate(90deg)' : 'rotate(0deg)';
           }}
         >
-          ☰
+          {isSidebarOpen ? '✕' : '☰'}
         </button>
       )}
       <div style={{
@@ -229,7 +245,7 @@ export default function DashboardLayout({ children, currentTab }) {
         {/* Main Content */}
         <div style={{
           flex: 1,
-          padding: '30px',
+          padding: isMobile ? '20px 20px 20px 80px' : '30px',
           backgroundColor: theme.innerBackground
         }}>
           <div style={{

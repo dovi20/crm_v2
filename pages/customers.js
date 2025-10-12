@@ -1,7 +1,7 @@
 import DashboardLayout from '../components/DashboardLayout';
 import { useState, useEffect } from 'react';
 
-function CustomerCard({ customer, theme, onClick }) {
+function CustomerCard({ customer, theme, onClick, isMobile }) {
   const fullName = `${customer.first_name || ''} ${customer.last_name || ''}`.trim() || 'לא צוין';
   const address = [customer.street, customer.city].filter(Boolean).join(', ') || 'לא צוין';
 
@@ -11,18 +11,22 @@ function CustomerCard({ customer, theme, onClick }) {
         backgroundColor: theme.cardBackground,
         border: `1px solid ${theme.border}`,
         borderRadius: '8px',
-        padding: '16px',
+        padding: isMobile ? '14px' : '16px',
         cursor: 'pointer',
         transition: 'all 0.2s ease',
         textAlign: 'center',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        minHeight: isMobile ? '140px' : 'auto',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
       }}
       onClick={onClick}
-      onMouseEnter={!window.matchMedia('(max-width: 768px)').matches ? (e) => {
+      onMouseEnter={!isMobile ? (e) => {
         e.target.style.transform = 'translateY(-2px)';
         e.target.style.boxShadow = `0 4px 12px ${theme.shadow || 'rgba(0,0,0,0.15)'}`;
       } : undefined}
-      onMouseLeave={!window.matchMedia('(max-width: 768px)').matches ? (e) => {
+      onMouseLeave={!isMobile ? (e) => {
         e.target.style.transform = 'translateY(0)';
         e.target.style.boxShadow = '0 1px 3px rgba(0,0,0,0.1)';
       } : undefined}
@@ -31,14 +35,14 @@ function CustomerCard({ customer, theme, onClick }) {
         <h4 style={{
           color: theme.textPrimary,
           margin: '0 0 4px 0',
-          fontSize: '16px',
+          fontSize: isMobile ? '15px' : '16px',
           fontWeight: '600'
         }}>
           {fullName}
         </h4>
         <span style={{
           color: '#6200ea',
-          fontSize: '12px',
+          fontSize: isMobile ? '11px' : '12px',
           fontWeight: '500'
         }}>
           ID: {customer.customer_id}
@@ -46,13 +50,29 @@ function CustomerCard({ customer, theme, onClick }) {
       </div>
 
       <div style={{ marginBottom: '8px' }}>
-        <span style={{ display: 'block', marginBottom: '4px', color: theme.textSecondary, fontSize: '12px', direction: 'ltr' }}>
+        <span style={{
+          display: 'block',
+          marginBottom: '4px',
+          color: theme.textSecondary,
+          fontSize: isMobile ? '11px' : '12px',
+          direction: 'ltr'
+        }}>
           📧 {customer.email || 'לא צוין'}
         </span>
-        <span style={{ display: 'block', marginBottom: '4px', color: theme.textSecondary, fontSize: '12px', direction: 'ltr' }}>
+        <span style={{
+          display: 'block',
+          marginBottom: '4px',
+          color: theme.textSecondary,
+          fontSize: isMobile ? '11px' : '12px',
+          direction: 'ltr'
+        }}>
           📱 {customer.phone || 'לא צוין'}
         </span>
-        <span style={{ display: 'block', color: theme.textSecondary, fontSize: '12px' }}>
+        <span style={{
+          display: 'block',
+          color: theme.textSecondary,
+          fontSize: isMobile ? '11px' : '12px'
+        }}>
           📍 {address}
         </span>
       </div>
@@ -78,6 +98,8 @@ export default function Customers() {
     phone: '',
     email: ''
   });
+  const [isMobile, setIsMobile] = useState(false);
+  const [isSmallMobile, setIsSmallMobile] = useState(false);
 
   const theme = {
     textPrimary: darkMode ? '#ffffff' : '#000000',
@@ -98,6 +120,17 @@ export default function Customers() {
       setActiveTab('details');
     }
   }, [modalOpen, selectedCustomer]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsSmallMobile(window.innerWidth <= 480);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const fetchCustomerDetails = async () => {
     if (!selectedCustomer) return;
@@ -337,9 +370,9 @@ export default function Customers() {
                 </div>
                 <div style={{
                   display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                  gap: '15px',
-                  padding: '20px',
+                  gridTemplateColumns: isSmallMobile ? '1fr' : isMobile ? 'repeat(2, 1fr)' : 'repeat(auto-fill, minmax(280px, 1fr))',
+                  gap: isMobile ? '12px' : '15px',
+                  padding: isMobile ? '15px' : '20px',
                   backgroundColor: theme.cardBackground,
                   border: `1px solid ${theme.border}`,
                   borderTop: 'none',
@@ -354,6 +387,7 @@ export default function Customers() {
                         setSelectedCustomer(customer);
                         setModalOpen(true);
                       }}
+                      isMobile={isMobile}
                     />
                   ))}
                 </div>
