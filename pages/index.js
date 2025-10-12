@@ -457,9 +457,6 @@ function ActionCard({ action, theme, isMobile }) {
   );
 }
 
-<<<<<<< HEAD
-function StatCard({ title, value, icon, color, theme, isMobile, isSmallMobile }) {
-=======
 function StatCard({ title, value, icon, color, theme }) {
   const formatValue = (val, title) => {
     if (val === null || val === undefined) return 'טוען...';
@@ -471,7 +468,6 @@ function StatCard({ title, value, icon, color, theme }) {
     return val.toLocaleString();
   };
 
->>>>>>> 8b6e8e6052f55d11c85849b4c8db54908f1fb279
   return (
     <div style={{
       backgroundColor: theme.cardBackground,
