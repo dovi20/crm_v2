@@ -457,7 +457,7 @@ function ActionCard({ action, theme, isMobile }) {
   );
 }
 
-function StatCard({ title, value, icon, color, theme }) {
+function StatCard({ title, value, icon, color, theme, isMobile, isSmallMobile }) {
   const formatValue = (val, title) => {
     if (val === null || val === undefined) return 'טוען...';
 
