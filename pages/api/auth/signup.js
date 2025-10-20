@@ -23,10 +23,22 @@ export default async function handler(req, res) {
     const user = await createUser(username, email, password);
     res.status(201).json({ message: 'User created successfully', user });
   } catch (error) {
+    console.error('Signup error:', error);
+    
     if (error.code === 'P2002') {
       return res.status(409).json({ message: 'User with this username or email already exists' });
     }
-    console.error('Signup error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    
+    if (error.code === 'P2021') {
+      return res.status(500).json({
+        message: 'Database table does not exist. Please run migrations.',
+        error: error.message
+      });
+    }
+    
+    res.status(500).json({
+      message: 'Internal server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 }
